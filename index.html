@@ -10,30 +10,32 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
-:root{--blue:#007aff;--green:#34c759;--red:#ff3b30;--gray:#8e8e93;--bg:#f2f2f7;--card:#fff;--border:#e5e5ea}
-.header{background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:52px 20px 10px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.header h1{font-size:26px;font-weight:700}
-.header .sub{font-size:12px;color:var(--gray);margin-top:2px}
-.tabs{display:flex;background:#e5e5ea;border-radius:10px;padding:2px;margin:12px 0 0}
+:root{--blue:#007aff;--green:#34c759;--red:#ff3b30;--gray:#8e8e93;--card:#fff;--border:#e5e5ea}
+.header{background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:52px 20px 10px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.header h1{font-size:24px;font-weight:700}
+.header .sub{font-size:11px;color:var(--gray);margin-top:1px}
+.tabs{display:flex;background:#e5e5ea;border-radius:10px;padding:2px;margin:10px 0 0}
 .tab{flex:1;padding:7px 0;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;transition:all .2s}
 .tab.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.summary{display:flex;gap:10px;padding:14px 20px;overflow-x:auto;scrollbar-width:none}
+.summary{display:flex;gap:9px;padding:13px 20px;overflow-x:auto;scrollbar-width:none}
 .summary::-webkit-scrollbar{display:none}
-.scard{min-width:120px;background:var(--card);border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);flex-shrink:0}
+.scard{min-width:115px;background:var(--card);border-radius:14px;padding:11px;box-shadow:0 1px 3px rgba(0,0,0,.08);flex-shrink:0}
 .scard .lbl{font-size:10px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
-.scard .val{font-size:18px;font-weight:700;margin-top:3px}
+.scard .val{font-size:17px;font-weight:700;margin-top:3px}
 .val.pos{color:var(--green)}.val.neg{color:var(--red)}
-.filter-bar{display:flex;gap:7px;padding:0 20px 12px;overflow-x:auto;scrollbar-width:none}
+.filter-bar{display:flex;gap:7px;padding:0 20px 11px;overflow-x:auto;scrollbar-width:none}
 .filter-bar::-webkit-scrollbar{display:none}
 .chip{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;color:#3a3a3c}
 .chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 .section{padding:0 20px 100px}
 .sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.sec-ttl{font-size:20px;font-weight:700}
+.sec-ttl{font-size:19px;font-weight:700}
 .btn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer}
 .btn.sm{padding:5px 12px;font-size:12px;border-radius:8px}
 .btn.out{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
 .btn.red{background:var(--red)}.btn.grn{background:var(--green)}
+.btn.refresh-all{background:linear-gradient(135deg,#007aff,#5856d6);font-size:13px;padding:8px 16px;border-radius:10px;display:flex;align-items:center;gap:5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .card{background:var(--card);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .inv-top{display:flex;justify-content:space-between;align-items:flex-start}
 .inv-name{font-size:15px;font-weight:700}
@@ -44,9 +46,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .badge.gbp{background:#f3e8ff;color:#7e22ce}.badge.eur{background:#fff7ed;color:#c2410c}
 .badge.hkd{background:#fef9c3;color:#a16207}
 .badge.cash{background:#dcfce7;color:#166534}.badge.srs{background:#fef9c3;color:#854d0e}.badge.cpf{background:#fce7f3;color:#9d174d}
-.spot-wrap{text-align:right}
-.spot-lbl{font-size:10px;color:var(--gray);margin-bottom:3px}
-.spot-inp{width:90px;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:13px;text-align:right;background:#f9f9f9}
+.price-box{text-align:right;min-width:110px}
+.price-lbl{font-size:10px;color:var(--gray);margin-bottom:3px;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.price-val{font-size:18px;font-weight:700;color:#1c1c1e}
+.price-change{font-size:11px;font-weight:600;margin-top:1px}
+.price-updated{font-size:9px;color:var(--gray);margin-top:2px}
+.price-manual{display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:4px}
+.spot-inp{width:85px;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:13px;text-align:right;background:#f9f9f9}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid #e5e5ea;border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.auto-badge{font-size:9px;background:#dcfce7;color:#15803d;padding:1px 5px;border-radius:6px;font-weight:700}
+.manual-badge{font-size:9px;background:#f2f2f7;color:var(--gray);padding:1px 5px;border-radius:6px;font-weight:700}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}
 .stat{background:#f2f2f7;border-radius:10px;padding:9px 10px}
 .stat .sl{font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
@@ -57,13 +67,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .tx-item:last-child{border-bottom:none}
 .tx-t{font-weight:700}.tx-t.buy{color:var(--blue)}.tx-t.sell{color:var(--red)}.tx-t.rights{color:#ff9500}.tx-t.free{color:var(--green)}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.overlay.hide{display:none}
 .modal{background:#fff;border-radius:22px 22px 0 0;padding:22px 20px 44px;width:100%;max-width:430px;max-height:88vh;overflow-y:auto}
 .modal h2{font-size:19px;font-weight:700;margin-bottom:16px}
 .fg{margin-bottom:12px}
 .fg label{font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:4px}
 .fg input,.fg select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:11px;font-size:15px;background:#fff;-webkit-appearance:none;appearance:none}
 .fg input:focus,.fg select:focus{outline:none;border-color:var(--blue)}
+.fg .hint{font-size:11px;color:var(--gray);margin-top:3px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .m-actions{display:flex;gap:9px;margin-top:18px}
 .m-actions .btn{flex:1;padding:13px}
@@ -72,18 +82,133 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .dtr{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:4px;padding:11px 12px;border-top:1px solid var(--border);font-size:12px;align-items:center}
 .empty{text-align:center;padding:40px 20px;color:var(--gray)}
 .empty .ico{font-size:38px;margin-bottom:8px}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.ticker-tip{background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:10px 12px;font-size:11px;color:#0369a1;margin-bottom:14px;line-height:1.5}
 </style>
 </head>
 <body>
 <div id="app"></div>
+<div class="toast" id="toast"></div>
+
 <script>
 // ─── State ────────────────────────────────────────────────────────────────
-let S={investments:[],dividends:[],tab:'portfolio',fCcy:'All',fAcc:'All',modal:null,editId:null,txId:null};
+let S={investments:[],dividends:[],tab:'portfolio',fCcy:'All',fAcc:'All',modal:null,editId:null,txId:null,refreshing:{}};
 try{const d=JSON.parse(localStorage.getItem('it2025')||'{}');S.investments=d.i||[];S.dividends=d.d||[];}catch(e){}
 function save(){try{localStorage.setItem('it2025',JSON.stringify({i:S.investments,d:S.dividends}));}catch(e){}}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
 function fmt(n,dp=2){if(n==null||isNaN(n))return'–';return Number(n).toLocaleString('en-SG',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
 function fc(n,c,dp=2){const m={SGD:'S$',USD:'US$',GBP:'£',EUR:'€',HKD:'HK$'};const s=(m[c]||c+' ');if(n==null||isNaN(n))return s+'–';return(n<0?'-':'')+s+Math.abs(n).toLocaleString('en-SG',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function toast(msg,dur=2500){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+function tsAgo(ts){if(!ts)return'';const m=Math.round((Date.now()-ts)/60000);if(m<1)return'just now';if(m<60)return m+'m ago';const h=Math.round(m/60);if(h<24)return h+'h ago';return Math.round(h/24)+'d ago';}
+
+// ─── Yahoo Finance Price Fetch ────────────────────────────────────────────
+// Maps market → Yahoo suffix
+function yahooTicker(inv){
+  const tk=(inv.ticker||'').trim().toUpperCase();
+  if(!tk)return null;
+  // If user already added suffix (e.g. ES3.SI, VWRA.L), use as-is
+  if(tk.includes('.'))return tk;
+  // Auto-append suffix by market
+  const mkt=(inv.market||'').toUpperCase();
+  if(mkt==='SGX')return tk+'.SI';
+  if(mkt==='LSE')return tk+'.L';
+  if(mkt==='HKEX')return tk+'.HK';
+  // NYSE/NASDAQ/Other — use bare ticker
+  return tk;
+}
+
+async function fetchYahooPrice(inv){
+  const yt=yahooTicker(inv);
+  if(!yt)return null;
+  try{
+    // Use Yahoo Finance v8 chart endpoint — works CORS-free in browsers
+    const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yt)}?interval=1d&range=1d`;
+    const res=await fetch(url);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const j=await res.json();
+    const meta=j?.chart?.result?.[0]?.meta;
+    if(!meta)throw new Error('No data');
+    const price=meta.regularMarketPrice||meta.previousClose;
+    const prev=meta.chartPreviousClose||meta.previousClose||price;
+    const change=price-prev;
+    const changePct=(prev>0?(change/prev)*100:0);
+    return{price,change,changePct,currency:meta.currency,name:meta.shortName||meta.longName||''};
+  }catch(e){
+    // Fallback: try ISIN search if ticker fails and ISIN is set
+    if(inv.isin){
+      return await fetchByISIN(inv.isin);
+    }
+    return null;
+  }
+}
+
+async function fetchByISIN(isin){
+  try{
+    const url=`https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(isin)}&quotesCount=1&newsCount=0`;
+    const res=await fetch(url);
+    const j=await res.json();
+    const sym=j?.quotes?.[0]?.symbol;
+    if(!sym)return null;
+    // Now fetch price for that symbol
+    const url2=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1d`;
+    const res2=await fetch(url2);
+    const j2=await res2.json();
+    const meta=j2?.chart?.result?.[0]?.meta;
+    if(!meta)return null;
+    const price=meta.regularMarketPrice||meta.previousClose;
+    const prev=meta.chartPreviousClose||meta.previousClose||price;
+    const change=price-prev;
+    const changePct=(prev>0?(change/prev)*100:0);
+    return{price,change,changePct,currency:meta.currency,name:meta.shortName||''};
+  }catch(e){return null;}
+}
+
+async function refreshOnePrice(invId){
+  const inv=S.investments.find(i=>i.id===invId);
+  if(!inv)return;
+  S.refreshing[invId]=true;render();
+  const result=await fetchYahooPrice(inv);
+  S.refreshing[invId]=false;
+  if(result&&result.price){
+    inv.spotPrice=result.price;
+    inv.priceChange=result.change;
+    inv.priceChangePct=result.changePct;
+    inv.priceUpdated=Date.now();
+    inv.priceAuto=true;
+    save();
+    toast(`✅ ${inv.name}: ${fc(result.price,inv.currency,3)}`);
+  }else{
+    inv.priceAuto=false;
+    toast(`⚠️ ${inv.ticker||inv.name}: price not found. Try adding market suffix (e.g. .SI .L)`);
+  }
+  render();
+}
+
+async function refreshAllPrices(){
+  if(!S.investments.length){toast('No investments added yet.');return;}
+  const eligible=S.investments.filter(i=>i.ticker||i.isin);
+  if(!eligible.length){toast('Add tickers to your investments first.');return;}
+  S.refreshingAll=true;render();
+  let ok=0,fail=0;
+  await Promise.all(eligible.map(async inv=>{
+    S.refreshing[inv.id]=true;
+    const result=await fetchYahooPrice(inv);
+    S.refreshing[inv.id]=false;
+    if(result&&result.price){
+      inv.spotPrice=result.price;
+      inv.priceChange=result.change;
+      inv.priceChangePct=result.changePct;
+      inv.priceUpdated=Date.now();
+      inv.priceAuto=true;
+      ok++;
+    }else{fail++;}
+  }));
+  S.refreshingAll=false;
+  save();
+  toast(`✅ ${ok} updated${fail?` · ⚠️ ${fail} failed`:''}`);
+  render();
+}
 
 // ─── Calc ─────────────────────────────────────────────────────────────────
 function calc(inv){
@@ -112,7 +237,13 @@ function render(){
   document.getElementById('app').innerHTML=`
 <div class="header">
   <div style="display:flex;justify-content:space-between;align-items:center">
-    <div><h1>📊 InvestTracker</h1><div class="sub">${new Date().toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</div></div>
+    <div>
+      <h1>📊 InvestTracker</h1>
+      <div class="sub">${new Date().toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</div>
+    </div>
+    <button class="btn refresh-all" onclick="refreshAllPrices()" ${S.refreshingAll?'disabled':''}>
+      ${S.refreshingAll?'<span class="spin"></span>':'🔄'} Refresh
+    </button>
   </div>
   <div class="tabs">
     <button class="tab ${S.tab==='portfolio'?'active':''}" onclick="setTab('portfolio')">Portfolio</button>
@@ -121,9 +252,10 @@ function render(){
 </div>
 ${S.tab==='portfolio'?renderPort(invs,tCost,tMv,tPl,tDiv):renderDivs()}
 ${renderModal()}`;
+
   document.querySelectorAll('.spi').forEach(el=>el.addEventListener('change',function(){
     const inv=S.investments.find(i=>i.id===this.dataset.id);
-    if(inv){inv.spotPrice=parseFloat(this.value)||0;save();render();}
+    if(inv){inv.spotPrice=parseFloat(this.value)||0;inv.priceAuto=false;inv.priceUpdated=Date.now();save();render();}
   }));
 }
 
@@ -141,27 +273,48 @@ function renderPort(invs,tC,tM,tP,tD){
   ${['All','Cash','SRS','CPF'].map(a=>`<button class="chip ${S.fAcc===a?'on':''}" onclick="setF('a','${a}')">${a}</button>`).join('')}
 </div>
 <div class="section">
-  <div class="sec-hdr"><span class="sec-ttl">Holdings (${invs.length})</span><button class="btn sm" onclick="openM('addInv')">+ Add</button></div>
+  <div class="sec-hdr">
+    <span class="sec-ttl">Holdings (${invs.length})</span>
+    <button class="btn sm" onclick="openM('addInv')">+ Add</button>
+  </div>
   ${invs.length===0?`<div class="empty"><div class="ico">📈</div><div>No investments yet.<br>Tap <b>+ Add</b> to begin.</div></div>`:''}
   ${invs.map(inv=>renderCard(inv)).join('')}
 </div>`;}
 
 function renderCard(inv){
   const s=calc(inv);
+  const isRefreshing=S.refreshing[inv.id];
+  const hasAutoPrice=inv.priceAuto&&inv.spotPrice;
+  const chg=inv.priceChange||0;
+  const chgPct=inv.priceChangePct||0;
+  const chgColor=chg>=0?'var(--green)':'var(--red)';
+
   return`<div class="card">
   <div class="inv-top">
-    <div>
+    <div style="flex:1;min-width:0">
       <div class="inv-name">${inv.name||'Unnamed'}</div>
-      <div class="inv-tkr">${inv.ticker||'–'} · ${inv.market||'–'}</div>
+      <div class="inv-tkr">${inv.ticker||'–'} ${inv.isin?'· '+inv.isin:''} · ${inv.market||'–'}</div>
       <div class="badges">
         <span class="badge">${inv.type||'Stock'}</span>
         <span class="badge ${(inv.currency||'').toLowerCase()}">${inv.currency||'–'}</span>
         <span class="badge ${(inv.account||'').toLowerCase()}">${inv.account||'–'}</span>
       </div>
     </div>
-    <div class="spot-wrap">
-      <div class="spot-lbl">Spot Price</div>
-      <input class="spot-inp spi" data-id="${inv.id}" type="number" step="0.0001" value="${inv.spotPrice||''}" placeholder="0.000">
+    <div class="price-box">
+      <div class="price-lbl">
+        ${hasAutoPrice?`<span class="auto-badge">AUTO</span>`:`<span class="manual-badge">MANUAL</span>`}
+        <button class="btn sm out" style="padding:2px 8px;font-size:10px" onclick="refreshOnePrice('${inv.id}')" ${isRefreshing?'disabled':''}>
+          ${isRefreshing?'<span class="spin"></span>':'🔄'}
+        </button>
+      </div>
+      ${inv.spotPrice?`
+        <div class="price-val">${fc(inv.spotPrice,inv.currency,3)}</div>
+        ${hasAutoPrice?`<div class="price-change" style="color:${chgColor}">${chg>=0?'+':''}${fc(chg,inv.currency,3)} (${chg>=0?'+':''}${fmt(chgPct,2)}%)</div>`:''}
+        <div class="price-updated">${inv.priceUpdated?tsAgo(inv.priceUpdated):''}</div>
+      `:`<div style="font-size:11px;color:var(--gray);margin-top:4px">No price yet</div>`}
+      <div class="price-manual">
+        <input class="spot-inp spi" data-id="${inv.id}" type="number" step="0.0001" value="${inv.spotPrice||''}" placeholder="Manual">
+      </div>
     </div>
   </div>
   <div class="grid2">
@@ -232,21 +385,30 @@ function renderDivs(){
 function renderModal(){
   if(!S.modal)return'';
   const ov=`class="overlay" onclick="bgClose(event)"`;
+
   if(S.modal==='addInv'||S.modal==='editInv'){
     const v=S.modal==='editInv'?S.investments.find(i=>i.id===S.editId):{};
     const isnew=S.modal==='addInv';
     return`<div ${ov}><div class="modal">
       <h2>${isnew?'Add Investment':'Edit Investment'}</h2>
+      <div class="ticker-tip">
+        💡 <strong>Ticker format for auto-prices:</strong><br>
+        SGX stocks: <b>D05.SI</b> · LSE ETFs: <b>VWRA.L</b> · US stocks: <b>AAPL</b> · HKEX: <b>0700.HK</b><br>
+        Unit Trusts: enter <b>ISIN</b> below (e.g. IE00B3RBWM25)
+      </div>
       <div class="fg"><label>Name *</label><input id="fn" placeholder="e.g. Vanguard FTSE All-World" value="${v.name||''}"></div>
       <div class="row2">
-        <div class="fg"><label>Ticker</label><input id="ftk" placeholder="e.g. VWRA" value="${v.ticker||''}"></div>
-        <div class="fg"><label>Type</label><select id="fty">${['ETF','Stock','Unit Trust','Bond'].map(x=>`<option ${v.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
+        <div class="fg"><label>Ticker</label><input id="ftk" placeholder="e.g. VWRA.L" value="${v.ticker||''}"><div class="hint">Include suffix: .SI .L .HK</div></div>
+        <div class="fg"><label>ISIN (optional)</label><input id="fis" placeholder="IE00B3RBWM25" value="${v.isin||''}"><div class="hint">For unit trusts</div></div>
       </div>
       <div class="row2">
+        <div class="fg"><label>Type</label><select id="fty">${['ETF','Stock','Unit Trust','Bond'].map(x=>`<option ${v.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
         <div class="fg"><label>Market</label><select id="fm">${['SGX','NYSE','NASDAQ','LSE','HKEX','Other'].map(x=>`<option ${v.market===x?'selected':''}>${x}</option>`).join('')}</select></div>
-        <div class="fg"><label>Currency</label><select id="fc2">${['SGD','USD','GBP','EUR','HKD'].map(x=>`<option ${v.currency===x?'selected':''}>${x}</option>`).join('')}</select></div>
       </div>
-      <div class="fg"><label>Account</label><select id="fa">${['Cash','SRS','CPF'].map(x=>`<option ${v.account===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="row2">
+        <div class="fg"><label>Currency</label><select id="fc2">${['SGD','USD','GBP','EUR','HKD'].map(x=>`<option ${v.currency===x?'selected':''}>${x}</option>`).join('')}</select></div>
+        <div class="fg"><label>Account</label><select id="fa">${['Cash','SRS','CPF'].map(x=>`<option ${v.account===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      </div>
       <div class="fg"><label>Notes</label><input id="fno" placeholder="Optional" value="${v.notes||''}"></div>
       <div class="m-actions">
         <button class="btn out" onclick="closeM()">Cancel</button>
@@ -307,10 +469,10 @@ function saveInv(){
   const name=document.getElementById('fn').value.trim();
   if(!name){alert('Name is required.');return;}
   if(S.modal==='addInv'){
-    S.investments.push({id:uid(),name,ticker:document.getElementById('ftk').value.trim(),type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim(),spotPrice:0,transactions:[]});
+    S.investments.push({id:uid(),name,ticker:document.getElementById('ftk').value.trim(),isin:document.getElementById('fis').value.trim(),type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim(),spotPrice:0,transactions:[]});
   }else{
     const inv=S.investments.find(i=>i.id===S.editId);
-    if(inv){Object.assign(inv,{name,ticker:document.getElementById('ftk').value.trim(),type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim()});}
+    if(inv){Object.assign(inv,{name,ticker:document.getElementById('ftk').value.trim(),isin:document.getElementById('fis').value.trim(),type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim()});}
   }
   save();closeM();}
 
