@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="InvestTracker">
+<title>InvestTracker</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
+:root{--blue:#007aff;--green:#34c759;--red:#ff3b30;--gray:#8e8e93;--bg:#f2f2f7;--card:#fff;--border:#e5e5ea}
+.header{background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:52px 20px 10px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.header h1{font-size:26px;font-weight:700}
+.header .sub{font-size:12px;color:var(--gray);margin-top:2px}
+.tabs{display:flex;background:#e5e5ea;border-radius:10px;padding:2px;margin:12px 0 0}
+.tab{flex:1;padding:7px 0;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;transition:all .2s}
+.tab.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.summary{display:flex;gap:10px;padding:14px 20px;overflow-x:auto;scrollbar-width:none}
+.summary::-webkit-scrollbar{display:none}
+.scard{min-width:120px;background:var(--card);border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);flex-shrink:0}
+.scard .lbl{font-size:10px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.scard .val{font-size:18px;font-weight:700;margin-top:3px}
+.val.pos{color:var(--green)}.val.neg{color:var(--red)}
+.filter-bar{display:flex;gap:7px;padding:0 20px 12px;overflow-x:auto;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.chip{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;color:#3a3a3c}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.section{padding:0 20px 100px}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sec-ttl{font-size:20px;font-weight:700}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.btn.sm{padding:5px 12px;font-size:12px;border-radius:8px}
+.btn.out{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+.btn.red{background:var(--red)}.btn.grn{background:var(--green)}
+.card{background:var(--card);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.inv-top{display:flex;justify-content:space-between;align-items:flex-start}
+.inv-name{font-size:15px;font-weight:700}
+.inv-tkr{font-size:11px;color:var(--gray);margin-top:1px}
+.badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#e5e5ea;color:#3a3a3c}
+.badge.usd{background:#dbeafe;color:#1d4ed8}.badge.sgd{background:#dcfce7;color:#15803d}
+.badge.gbp{background:#f3e8ff;color:#7e22ce}.badge.eur{background:#fff7ed;color:#c2410c}
+.badge.hkd{background:#fef9c3;color:#a16207}
+.badge.cash{background:#dcfce7;color:#166534}.badge.srs{background:#fef9c3;color:#854d0e}.badge.cpf{background:#fce7f3;color:#9d174d}
+.spot-wrap{text-align:right}
+.spot-lbl{font-size:10px;color:var(--gray);margin-bottom:3px}
+.spot-inp{width:90px;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:13px;text-align:right;background:#f9f9f9}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}
+.stat{background:#f2f2f7;border-radius:10px;padding:9px 10px}
+.stat .sl{font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.stat .sv{font-size:13px;font-weight:700;margin-top:2px}
+.actions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.tx-hdr{font-size:11px;font-weight:700;color:var(--gray);margin:10px 0 4px;letter-spacing:.3px;text-transform:uppercase}
+.tx-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.tx-item:last-child{border-bottom:none}
+.tx-t{font-weight:700}.tx-t.buy{color:var(--blue)}.tx-t.sell{color:var(--red)}.tx-t.rights{color:#ff9500}.tx-t.free{color:var(--green)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.overlay.hide{display:none}
+.modal{background:#fff;border-radius:22px 22px 0 0;padding:22px 20px 44px;width:100%;max-width:430px;max-height:88vh;overflow-y:auto}
+.modal h2{font-size:19px;font-weight:700;margin-bottom:16px}
+.fg{margin-bottom:12px}
+.fg label{font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:4px}
+.fg input,.fg select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:11px;font-size:15px;background:#fff;-webkit-appearance:none;appearance:none}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--blue)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.m-actions{display:flex;gap:9px;margin-top:18px}
+.m-actions .btn{flex:1;padding:13px}
+.div-tbl{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:14px}
+.dthr{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:4px;padding:9px 12px;background:#f2f2f7;font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.dtr{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:4px;padding:11px 12px;border-top:1px solid var(--border);font-size:12px;align-items:center}
+.empty{text-align:center;padding:40px 20px;color:var(--gray)}
+.empty .ico{font-size:38px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ─── State ────────────────────────────────────────────────────────────────
+let S={investments:[],dividends:[],tab:'portfolio',fCcy:'All',fAcc:'All',modal:null,editId:null,txId:null};
+try{const d=JSON.parse(localStorage.getItem('it2025')||'{}');S.investments=d.i||[];S.dividends=d.d||[];}catch(e){}
+function save(){try{localStorage.setItem('it2025',JSON.stringify({i:S.investments,d:S.dividends}));}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function fmt(n,dp=2){if(n==null||isNaN(n))return'–';return Number(n).toLocaleString('en-SG',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function fc(n,c,dp=2){const m={SGD:'S$',USD:'US$',GBP:'£',EUR:'€',HKD:'HK$'};const s=(m[c]||c+' ');if(n==null||isNaN(n))return s+'–';return(n<0?'-':'')+s+Math.abs(n).toLocaleString('en-SG',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+
+// ─── Calc ─────────────────────────────────────────────────────────────────
+function calc(inv){
+  let sh=0,cost=0;
+  for(const t of(inv.transactions||[])){
+    const u=+t.shares||0,p=+t.price||0,f=+t.fees||0;
+    if(t.type==='Buy'){cost+=u*p+f;sh+=u;}
+    else if(t.type==='Sell'){const ac=sh>0?cost/sh:0;cost-=u*ac;sh-=u;}
+    else if(t.type==='Rights Issue'){cost+=u*p+f;sh+=u;}
+    else if(t.type==='Free Issue'){sh+=u;}
+  }
+  const avg=sh>0?cost/sh:0,spot=+inv.spotPrice||0,mv=spot*sh,pl=mv-cost,plp=cost>0?(pl/cost)*100:0;
+  const yr=new Date().getFullYear().toString();
+  const myDivs=S.dividends.filter(d=>d.invId===inv.id);
+  const dyr=myDivs.filter(d=>d.date?.startsWith(yr)).reduce((s,d)=>s+(+d.amount||0),0);
+  const dtot=myDivs.reduce((s,d)=>s+(+d.amount||0),0);
+  const dy=cost>0?(dyr/cost)*100:0;
+  return{sh,cost,avg,spot,mv,pl,plp,dyr,dtot,dy};
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────
+function render(){
+  const invs=S.investments.filter(i=>(S.fCcy==='All'||i.currency===S.fCcy)&&(S.fAcc==='All'||i.account===S.fAcc));
+  const all=S.investments.map(i=>calc(i));
+  const tCost=all.reduce((s,x)=>s+x.cost,0),tMv=all.reduce((s,x)=>s+x.mv,0),tPl=tMv-tCost,tDiv=all.reduce((s,x)=>s+x.dyr,0);
+  document.getElementById('app').innerHTML=`
+<div class="header">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div><h1>📊 InvestTracker</h1><div class="sub">${new Date().toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab ${S.tab==='portfolio'?'active':''}" onclick="setTab('portfolio')">Portfolio</button>
+    <button class="tab ${S.tab==='dividends'?'active':''}" onclick="setTab('dividends')">Dividends</button>
+  </div>
+</div>
+${S.tab==='portfolio'?renderPort(invs,tCost,tMv,tPl,tDiv):renderDivs()}
+${renderModal()}`;
+  document.querySelectorAll('.spi').forEach(el=>el.addEventListener('change',function(){
+    const inv=S.investments.find(i=>i.id===this.dataset.id);
+    if(inv){inv.spotPrice=parseFloat(this.value)||0;save();render();}
+  }));
+}
+
+function renderPort(invs,tC,tM,tP,tD){
+  return`
+<div class="summary">
+  <div class="scard"><div class="lbl">Total Cost</div><div class="val">${fc(tC,'SGD',0)}</div></div>
+  <div class="scard"><div class="lbl">Mkt Value</div><div class="val">${fc(tM,'SGD',0)}</div></div>
+  <div class="scard"><div class="lbl">Unreal. P&L</div><div class="val ${tP>=0?'pos':'neg'}">${tP>=0?'+':''}${fc(tP,'SGD',0)}</div></div>
+  <div class="scard"><div class="lbl">Div YTD</div><div class="val pos">${fc(tD,'SGD',0)}</div></div>
+</div>
+<div class="filter-bar">
+  ${['All','SGD','USD','GBP','EUR','HKD'].map(c=>`<button class="chip ${S.fCcy===c?'on':''}" onclick="setF('c','${c}')">${c}</button>`).join('')}
+  <span style="width:1px;background:#e5e5ea;border-radius:2px;flex-shrink:0"></span>
+  ${['All','Cash','SRS','CPF'].map(a=>`<button class="chip ${S.fAcc===a?'on':''}" onclick="setF('a','${a}')">${a}</button>`).join('')}
+</div>
+<div class="section">
+  <div class="sec-hdr"><span class="sec-ttl">Holdings (${invs.length})</span><button class="btn sm" onclick="openM('addInv')">+ Add</button></div>
+  ${invs.length===0?`<div class="empty"><div class="ico">📈</div><div>No investments yet.<br>Tap <b>+ Add</b> to begin.</div></div>`:''}
+  ${invs.map(inv=>renderCard(inv)).join('')}
+</div>`;}
+
+function renderCard(inv){
+  const s=calc(inv);
+  return`<div class="card">
+  <div class="inv-top">
+    <div>
+      <div class="inv-name">${inv.name||'Unnamed'}</div>
+      <div class="inv-tkr">${inv.ticker||'–'} · ${inv.market||'–'}</div>
+      <div class="badges">
+        <span class="badge">${inv.type||'Stock'}</span>
+        <span class="badge ${(inv.currency||'').toLowerCase()}">${inv.currency||'–'}</span>
+        <span class="badge ${(inv.account||'').toLowerCase()}">${inv.account||'–'}</span>
+      </div>
+    </div>
+    <div class="spot-wrap">
+      <div class="spot-lbl">Spot Price</div>
+      <input class="spot-inp spi" data-id="${inv.id}" type="number" step="0.0001" value="${inv.spotPrice||''}" placeholder="0.000">
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="stat"><div class="sl">Units Held</div><div class="sv">${fmt(s.sh,4)}</div></div>
+    <div class="stat"><div class="sl">Avg Cost</div><div class="sv">${fc(s.avg,inv.currency,4)}</div></div>
+    <div class="stat"><div class="sl">Total Cost</div><div class="sv">${fc(s.cost,inv.currency)}</div></div>
+    <div class="stat"><div class="sl">Mkt Value</div><div class="sv">${fc(s.mv,inv.currency)}</div></div>
+    <div class="stat"><div class="sl">Unreal. P&L</div><div class="sv ${s.pl>=0?'pos':'neg'}">${s.pl>=0?'+':''}${fc(s.pl,inv.currency)}<br><small>${s.pl>=0?'+':''}${fmt(s.plp,2)}%</small></div></div>
+    <div class="stat"><div class="sl">Div Yield YTD</div><div class="sv pos">${fmt(s.dy,2)}%</div></div>
+    <div class="stat"><div class="sl">Div This Year</div><div class="sv pos">${fc(s.dyr,inv.currency)}</div></div>
+    <div class="stat"><div class="sl">Div Cumulative</div><div class="sv pos">${fc(s.dtot,inv.currency)}</div></div>
+  </div>
+  <div class="actions">
+    <button class="btn sm out" onclick="openTx('${inv.id}')">+ Transaction</button>
+    <button class="btn sm out" onclick="openDiv('${inv.id}')">+ Dividend</button>
+    <button class="btn sm out" onclick="openEdit('${inv.id}')">Edit</button>
+    <button class="btn sm red" onclick="delInv('${inv.id}')">Delete</button>
+  </div>
+  ${renderTxs(inv)}
+</div>`;}
+
+function renderTxs(inv){
+  const txs=(inv.transactions||[]).slice().reverse().slice(0,5);
+  if(!txs.length)return'';
+  return`<div class="tx-hdr">Recent Transactions</div>
+  ${txs.map(t=>`<div class="tx-item">
+    <div><span class="tx-t ${t.type.toLowerCase().replace(' issue','').replace(' ','')}">${t.type}</span> <span style="color:var(--gray)">${t.date||''}</span></div>
+    <div style="text-align:right"><div>${fmt(t.shares,4)} units</div>${t.price?`<div style="color:var(--gray);font-size:11px">@ ${fc(t.price,inv.currency,4)}</div>`:''}</div>
+  </div>`).join('')}`;}
+
+function renderDivs(){
+  const divs=S.dividends.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const yr=new Date().getFullYear().toString();
+  const tot=divs.reduce((s,d)=>s+(+d.amount||0),0);
+  const ytd=divs.filter(d=>d.date?.startsWith(yr)).reduce((s,d)=>s+(+d.amount||0),0);
+  const byInv={};divs.forEach(d=>{if(!byInv[d.invId])byInv[d.invId]=[];byInv[d.invId].push(d);});
+  return`
+<div class="summary">
+  <div class="scard"><div class="lbl">All Time</div><div class="val pos">${fc(tot,'SGD')}</div></div>
+  <div class="scard"><div class="lbl">YTD ${yr}</div><div class="val pos">${fc(ytd,'SGD')}</div></div>
+  <div class="scard"><div class="lbl">Records</div><div class="val">${divs.length}</div></div>
+</div>
+<div class="section">
+  <div class="sec-hdr"><span class="sec-ttl">Dividend Ledger</span><button class="btn sm grn" onclick="openDivG()">+ Add</button></div>
+  ${divs.length===0?`<div class="empty"><div class="ico">💰</div><div>No dividends yet.</div></div>`:''}
+  ${Object.entries(byInv).map(([id,ds])=>{
+    const inv=S.investments.find(i=>i.id===id);
+    const name=inv?.name||'Unknown';
+    const t=ds.reduce((s,d)=>s+(+d.amount||0),0);
+    return`<div style="margin-bottom:16px">
+      <div style="font-size:14px;font-weight:700;display:flex;justify-content:space-between;margin-bottom:6px">
+        <span>${name} <span style="font-size:11px;color:var(--gray);font-weight:500">${inv?.ticker||''}</span></span>
+        <span style="color:var(--green)">${fc(t,inv?.currency||'SGD')}</span>
+      </div>
+      <div class="div-tbl">
+        <div class="dthr"><span>Date</span><span>Type</span><span>Amount</span><span>Notes</span></div>
+        ${ds.map(d=>`<div class="dtr">
+          <span>${d.date||'–'}</span>
+          <span style="font-size:10px">${d.divType||'Cash'}</span>
+          <span style="font-weight:700;color:var(--green)">${fc(d.amount,inv?.currency||'SGD',4)}</span>
+          <span style="color:var(--gray);font-size:10px">${d.notes||''}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;}).join('')}
+</div>`;}
+
+// ─── Modals ───────────────────────────────────────────────────────────────
+function renderModal(){
+  if(!S.modal)return'';
+  const ov=`class="overlay" onclick="bgClose(event)"`;
+  if(S.modal==='addInv'||S.modal==='editInv'){
+    const v=S.modal==='editInv'?S.investments.find(i=>i.id===S.editId):{};
+    const isnew=S.modal==='addInv';
+    return`<div ${ov}><div class="modal">
+      <h2>${isnew?'Add Investment':'Edit Investment'}</h2>
+      <div class="fg"><label>Name *</label><input id="fn" placeholder="e.g. Vanguard FTSE All-World" value="${v.name||''}"></div>
+      <div class="row2">
+        <div class="fg"><label>Ticker</label><input id="ftk" placeholder="e.g. VWRA" value="${v.ticker||''}"></div>
+        <div class="fg"><label>Type</label><select id="fty">${['ETF','Stock','Unit Trust','Bond'].map(x=>`<option ${v.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Market</label><select id="fm">${['SGX','NYSE','NASDAQ','LSE','HKEX','Other'].map(x=>`<option ${v.market===x?'selected':''}>${x}</option>`).join('')}</select></div>
+        <div class="fg"><label>Currency</label><select id="fc2">${['SGD','USD','GBP','EUR','HKD'].map(x=>`<option ${v.currency===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      </div>
+      <div class="fg"><label>Account</label><select id="fa">${['Cash','SRS','CPF'].map(x=>`<option ${v.account===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="fg"><label>Notes</label><input id="fno" placeholder="Optional" value="${v.notes||''}"></div>
+      <div class="m-actions">
+        <button class="btn out" onclick="closeM()">Cancel</button>
+        <button class="btn" onclick="saveInv()">${isnew?'Add':'Save'}</button>
+      </div>
+    </div></div>`;}
+
+  if(S.modal==='addTx'){
+    const inv=S.investments.find(i=>i.id===S.txId);
+    return`<div ${ov}><div class="modal">
+      <h2>Add Transaction</h2>
+      <div style="font-size:12px;color:var(--gray);font-weight:600;margin-bottom:14px">${inv?.name||''} (${inv?.currency||''})</div>
+      <div class="fg"><label>Type *</label><select id="ftt">${['Buy','Sell','Rights Issue','Free Issue'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+      <div class="row2">
+        <div class="fg"><label>Date *</label><input id="ftd" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+        <div class="fg"><label>Units *</label><input id="fts" type="number" step="0.0001" placeholder="0.0000"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Price / Unit</label><input id="ftp" type="number" step="0.0001" placeholder="0.0000"></div>
+        <div class="fg"><label>Fees</label><input id="ftf" type="number" step="0.01" placeholder="0.00"></div>
+      </div>
+      <div class="fg"><label>Notes</label><input id="ftn" placeholder="Optional"></div>
+      <div class="m-actions">
+        <button class="btn out" onclick="closeM()">Cancel</button>
+        <button class="btn" onclick="saveTx()">Add</button>
+      </div>
+    </div></div>`;}
+
+  if(S.modal==='addDiv'){
+    return`<div ${ov}><div class="modal">
+      <h2>Add Dividend</h2>
+      <div class="fg"><label>Investment *</label><select id="fdi">${S.investments.map(i=>`<option value="${i.id}" ${i.id===S.txId?'selected':''}>${i.name} (${i.ticker||i.currency})</option>`).join('')}</select></div>
+      <div class="row2">
+        <div class="fg"><label>Date *</label><input id="fdd" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+        <div class="fg"><label>Amount *</label><input id="fda" type="number" step="0.0001" placeholder="0.0000"></div>
+      </div>
+      <div class="fg"><label>Type</label><select id="fdt">${['Cash','Scrip','Special','Return of Capital'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+      <div class="fg"><label>Notes</label><input id="fdn" placeholder="e.g. Q1 2025"></div>
+      <div class="m-actions">
+        <button class="btn out" onclick="closeM()">Cancel</button>
+        <button class="btn grn" onclick="saveDiv()">Add</button>
+      </div>
+    </div></div>`;}
+  return'';}
+
+// ─── Actions ──────────────────────────────────────────────────────────────
+function setTab(t){S.tab=t;render();}
+function setF(k,v){if(k==='c')S.fCcy=v;else S.fAcc=v;render();}
+function openM(m){S.modal=m;S.editId=null;render();}
+function openEdit(id){S.modal='editInv';S.editId=id;render();}
+function openTx(id){S.modal='addTx';S.txId=id;render();}
+function openDiv(id){S.modal='addDiv';S.txId=id;render();}
+function openDivG(){S.modal='addDiv';S.txId=S.investments[0]?.id||null;render();}
+function closeM(){S.modal=null;S.editId=null;S.txId=null;render();}
+function bgClose(e){if(e.target.classList.contains('overlay'))closeM();}
+
+function saveInv(){
+  const name=document.getElementById('fn').value.trim();
+  if(!name){alert('Name is required.');return;}
+  if(S.modal==='addInv'){
+    S.investments.push({id:uid(),name,ticker:document.getElementById('ftk').value.trim(),type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim(),spotPrice:0,transactions:[]});
+  }else{
+    const inv=S.investments.find(i=>i.id===S.editId);
+    if(inv){Object.assign(inv,{name,ticker:document.getElementById('ftk').value.trim(),type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim()});}
+  }
+  save();closeM();}
+
+function saveTx(){
+  const sh=parseFloat(document.getElementById('fts').value);
+  if(!sh||sh<=0){alert('Enter valid units.');return;}
+  const inv=S.investments.find(i=>i.id===S.txId);if(!inv)return;
+  if(!inv.transactions)inv.transactions=[];
+  inv.transactions.push({id:uid(),type:document.getElementById('ftt').value,date:document.getElementById('ftd').value,shares:sh,price:parseFloat(document.getElementById('ftp').value)||0,fees:parseFloat(document.getElementById('ftf').value)||0,notes:document.getElementById('ftn').value.trim()});
+  save();closeM();}
+
+function saveDiv(){
+  const amt=parseFloat(document.getElementById('fda').value);
+  if(!amt||amt<=0){alert('Enter valid amount.');return;}
+  S.dividends.push({id:uid(),invId:document.getElementById('fdi').value,date:document.getElementById('fdd').value,amount:amt,divType:document.getElementById('fdt').value,notes:document.getElementById('fdn').value.trim()});
+  save();closeM();}
+
+function delInv(id){
+  if(!confirm('Delete this investment and all its data?'))return;
+  S.investments=S.investments.filter(i=>i.id!==id);
+  S.dividends=S.dividends.filter(d=>d.invId!==id);
+  save();render();}
+
+render();
+</script>
+</body>
+</html>
