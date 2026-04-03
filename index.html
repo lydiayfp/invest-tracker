@@ -10,12 +10,12 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
-:root{--blue:#007aff;--green:#34c759;--red:#ff3b30;--gray:#8e8e93;--card:#fff;--border:#e5e5ea;--purple:#af52de;--orange:#ff9500}
+:root{--blue:#007aff;--green:#34c759;--red:#ff3b30;--gray:#8e8e93;--card:#fff;--border:#e5e5ea;--purple:#af52de;--orange:#ff9500;--teal:#5ac8fa;--indigo:#5856d6}
 .header{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:52px 20px 10px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
 .header h1{font-size:24px;font-weight:700}
 .sub{font-size:11px;color:var(--gray);margin-top:1px}
 .tabs{display:flex;background:#e5e5ea;border-radius:10px;padding:2px;margin:10px 0 0}
-.tab{flex:1;padding:7px 0;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;transition:all .2s}
+.tab{flex:1;padding:7px 0;border:none;background:transparent;border-radius:8px;font-size:12px;font-weight:500;color:var(--gray);cursor:pointer;transition:all .2s}
 .tab.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .summary{display:flex;gap:9px;padding:13px 20px;overflow-x:auto;scrollbar-width:none}
 .summary::-webkit-scrollbar{display:none}
@@ -59,26 +59,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 @keyframes spin{to{transform:rotate(360deg)}}
 .manual-row{display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:5px}
 .spot-inp{width:88px;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:13px;text-align:right;background:#f9f9f9}
-/* Stats grid */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}
 .stat{background:#f2f2f7;border-radius:10px;padding:9px 10px}
 .stat .sl{font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
 .stat .sv{font-size:13px;font-weight:700;margin-top:2px}
-/* Dividend 3-column strip */
 .div-strip{background:linear-gradient(135deg,#f0fdf4,#f0f9ff);border:1px solid #d1fae5;border-radius:12px;padding:11px 12px;margin-top:10px}
-.div-strip-title{font-size:10px;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.div-strip-title{font-size:10px;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
 .div-strip-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
 .div-col{text-align:center;padding:4px 2px}
 .div-col:not(:last-child){border-right:1px solid #d1fae5}
 .div-col .dc-lbl{font-size:9px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.3px;line-height:1.3}
 .div-col .dc-val{font-size:13px;font-weight:700;color:#15803d;margin-top:3px}
 .div-col .dc-sub{font-size:9px;color:#6b7280;margin-top:1px}
-/* Yield row */
 .yield-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid #d1fae5}
 .yield-item{text-align:center;flex:1}
 .yield-item .yl{font-size:9px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
 .yield-item .yv{font-size:12px;font-weight:700;margin-top:2px}
-/* Transactions */
 .actions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
 .tx-hdr{font-size:11px;font-weight:700;color:var(--gray);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.3px}
 .tx-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
@@ -97,7 +93,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .m-actions{display:flex;gap:9px;margin-top:18px}
 .m-actions .btn{flex:1;padding:13px}
-/* Autocomplete */
 .ac-drop{position:absolute;left:0;right:0;top:calc(100% - 2px);background:#fff;border:1.5px solid var(--blue);border-top:none;border-radius:0 0 11px 11px;z-index:50;max-height:200px;overflow-y:auto;box-shadow:0 8px 20px rgba(0,0,0,.12)}
 .ac-item{padding:10px 13px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
 .ac-item:last-child{border-bottom:none}
@@ -106,11 +101,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .ac-name{color:#1c1c1e;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ac-ex{font-size:10px;color:var(--gray)}
 .ac-loading{padding:14px;text-align:center;color:var(--gray);font-size:13px}
-/* Dividend Ledger */
 .div-yr-block{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:6px}
-.div-yr-hdr{display:grid;grid-template-columns:1.6fr 0.8fr 1fr 1fr;gap:4px;padding:8px 12px;background:#f2f2f7;font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.div-yr-hdr{display:grid;grid-template-columns:1.6fr 0.8fr 1fr 1fr;gap:4px;padding:8px 12px;background:#f2f2f7;font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase}
 .div-yr-row{display:grid;grid-template-columns:1.6fr 0.8fr 1fr 1fr;gap:4px;padding:10px 12px;border-top:1px solid var(--border);font-size:12px;align-items:center}
-/* Dividend summary per investment in ledger */
 .ledger-inv{margin-bottom:18px}
 .ledger-inv-hdr{font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .ledger-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:8px}
@@ -122,6 +115,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .ls-box.bf .ls-val{color:#0369a1}
 .ls-box .ls-val{color:#15803d}
 .ls-box.tot .ls-val{color:#7e22ce}
+/* ── Summary Page ──────────────────────────────────────────────────────── */
+.sumpage{padding:0 20px 100px}
+.sum-section{margin-bottom:20px}
+.sum-section-title{font-size:16px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+/* Pie chart */
+.pie-wrap{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:12px}
+.pie-title{font-size:14px;font-weight:700;margin-bottom:14px;color:#1c1c1e}
+.pie-body{display:flex;align-items:center;gap:16px}
+.pie-svg{flex-shrink:0}
+.pie-legend{flex:1;display:flex;flex-direction:column;gap:7px}
+.pie-leg-item{display:flex;align-items:center;gap:7px}
+.pie-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.pie-leg-label{font-size:12px;font-weight:500;color:#1c1c1e;flex:1}
+.pie-leg-val{font-size:12px;font-weight:700;color:#1c1c1e;text-align:right}
+.pie-leg-pct{font-size:10px;color:var(--gray);text-align:right;min-width:36px}
+/* Breakdown table */
+.breakdown-card{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:12px}
+.bk-hdr{display:grid;gap:4px;padding:9px 14px;background:#f2f2f7;font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.bk-row{display:grid;gap:4px;padding:12px 14px;border-top:1px solid var(--border);font-size:13px;align-items:center}
+.bk-row:last-child{border-bottom:none}
+.bk-label{font-weight:700;display:flex;align-items:center;gap:7px}
+.bk-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* Profitability rows */
+.prof-winner{background:#f0fdf4}
+.prof-loser{background:#fff5f5}
+/* Top holdings */
+.holding-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-top:1px solid var(--border);font-size:13px}
+.holding-row:first-child{border-top:none}
+.holding-bar-bg{height:4px;background:#e5e5ea;border-radius:2px;margin-top:4px}
+.holding-bar-fill{height:4px;border-radius:2px;transition:width .5s ease}
 .empty{text-align:center;padding:40px 20px;color:var(--gray)}
 .empty .ico{font-size:38px;margin-bottom:8px}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw}
@@ -136,13 +159,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 const PROXY='https://corsproxy.io/?';
 async function yfFetch(path){
   const r=await fetch(PROXY+encodeURIComponent('https://query1.finance.yahoo.com'+path),{headers:{'x-requested-with':'XMLHttpRequest'}});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  return r.json();
+  if(!r.ok)throw new Error('HTTP '+r.status);return r.json();
 }
 async function yf2Fetch(path){
   const r=await fetch(PROXY+encodeURIComponent('https://query2.finance.yahoo.com'+path),{headers:{'x-requested-with':'XMLHttpRequest'}});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  return r.json();
+  if(!r.ok)throw new Error('HTTP '+r.status);return r.json();
 }
 async function searchTicker(q){
   const j=await yf2Fetch(`/v1/finance/search?q=${encodeURIComponent(q)}&quotesCount=8&newsCount=0&enableFuzzyQuery=true&enableCb=false`);
@@ -153,8 +174,7 @@ async function fetchPrice(sym){
   const j=await yfFetch(`/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1d`);
   const m=j?.chart?.result?.[0]?.meta;
   if(!m)throw new Error('No data');
-  const p=m.regularMarketPrice||m.previousClose;
-  const pv=m.chartPreviousClose||m.previousClose||p;
+  const p=m.regularMarketPrice||m.previousClose,pv=m.chartPreviousClose||m.previousClose||p;
   return{price:p,change:p-pv,changePct:pv>0?((p-pv)/pv)*100:0,currency:m.currency||''};
 }
 
@@ -181,10 +201,8 @@ function toast(msg,dur=3000){
 function tsAgo(ts){
   if(!ts)return'';
   const m=Math.round((Date.now()-ts)/60000);
-  if(m<1)return'just now';
-  if(m<60)return m+'m ago';
-  const h=Math.round(m/60);
-  return h<24?h+'h ago':Math.round(h/24)+'d ago';
+  if(m<1)return'just now';if(m<60)return m+'m ago';
+  const h=Math.round(m/60);return h<24?h+'h ago':Math.round(h/24)+'d ago';
 }
 
 // ─── Price Refresh ────────────────────────────────────────────────────────
@@ -197,7 +215,7 @@ async function refreshOne(invId){
     inv.spotPrice=r.price;inv.priceChange=r.change;inv.priceChangePct=r.changePct;
     inv.priceUpdated=Date.now();inv.priceAuto=true;
     save();toast('✅ '+inv.name+': '+fc(r.price,inv.currency,3));
-  }catch(e){toast('⚠️ '+inv.ticker+': fetch failed. Check ticker.');}
+  }catch(e){toast('⚠️ '+inv.ticker+': fetch failed.');}
   S.refreshing[invId]=false;render();
 }
 async function refreshAll(){
@@ -215,8 +233,7 @@ async function refreshAll(){
     S.refreshing[inv.id]=false;
   }));
   S.refreshingAll=false;save();
-  toast('✅ '+ok+' updated'+(fail?' · ⚠️ '+fail+' failed':''));
-  render();
+  toast('✅ '+ok+' updated'+(fail?' · ⚠️ '+fail+' failed':''));render();
 }
 setInterval(()=>{if(!document.hidden&&S.investments.some(i=>i.ticker))refreshAll();},5*60*1000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.investments.some(i=>i.ticker))refreshAll();});
@@ -227,22 +244,18 @@ function onNameInput(val){
   if(val.length<2){S.acLoading=false;renderAC();return;}
   S.acLoading=true;renderAC();
   S.acTimer=setTimeout(async()=>{
-    try{
-      const res=await searchTicker(val);
-      if(S.acQuery===val){S.acResults=res;S.acLoading=false;renderAC();}
-    }catch(e){S.acLoading=false;renderAC();}
+    try{const res=await searchTicker(val);if(S.acQuery===val){S.acResults=res;S.acLoading=false;renderAC();}}
+    catch(e){S.acLoading=false;renderAC();}
   },400);
 }
 function renderAC(){
-  const drop=document.getElementById('ac-drop');
-  if(!drop)return;
+  const drop=document.getElementById('ac-drop');if(!drop)return;
   if(S.acLoading){drop.innerHTML='<div class="ac-loading"><span class="spin"></span> Searching…</div>';drop.style.display='block';return;}
   if(!S.acResults.length){drop.style.display='none';return;}
   drop.innerHTML=S.acResults.map((r,i)=>`
     <div class="ac-item" onclick="pickAC(${i})">
       <div style="display:flex;justify-content:space-between">
-        <span class="ac-name">${r.name}</span>
-        <span class="ac-sym">${r.symbol}</span>
+        <span class="ac-name">${r.name}</span><span class="ac-sym">${r.symbol}</span>
       </div>
       <span class="ac-ex">${r.exchange} · ${r.type}</span>
     </div>`).join('');
@@ -251,8 +264,7 @@ function renderAC(){
 function pickAC(i){
   const r=S.acResults[i];
   const ne=document.getElementById('fn'),te=document.getElementById('ftk');
-  if(ne&&!ne.value)ne.value=r.name;
-  if(te)te.value=r.symbol;
+  if(ne&&!ne.value)ne.value=r.name;if(te)te.value=r.symbol;
   const excCcy={NMS:'USD',NYQ:'USD',NGM:'USD',LSE:'GBP',SES:'SGD',HKG:'HKD',FRA:'EUR',EPA:'EUR'};
   const ccy=excCcy[r.exchange]||'';
   if(ccy){const el=document.getElementById('fc2');if(el)el.value=ccy;}
@@ -275,24 +287,254 @@ function calc(inv){
   }
   const avg=sh>0?cost/sh:0,spot=+inv.spotPrice||0,mv=spot*sh,pl=mv-cost,plp=cost>0?(pl/cost)*100:0;
   const myDivs=S.dividends.filter(d=>d.invId===inv.id);
-  // ── Dividend breakdown ──────────────────────────────────────────────────
-  const dbf  = myDivs.filter(d=>d.date&&d.date.slice(0,4)<CY).reduce((s,d)=>s+(+d.amount||0),0); // Accum B/F
-  const dcur  = myDivs.filter(d=>d.date&&d.date.startsWith(CY)).reduce((s,d)=>s+(+d.amount||0),0); // Current year
-  const dtot  = dbf+dcur;                                                                           // Accum To-Date
-  const dy   = cost>0?(dcur/cost)*100:0;  // yield based on current year div
-  const dytot = cost>0?(dtot/cost)*100:0; // yield based on total
+  const dbf=myDivs.filter(d=>d.date&&d.date.slice(0,4)<CY).reduce((s,d)=>s+(+d.amount||0),0);
+  const dcur=myDivs.filter(d=>d.date&&d.date.startsWith(CY)).reduce((s,d)=>s+(+d.amount||0),0);
+  const dtot=dbf+dcur;
+  const dy=cost>0?(dcur/cost)*100:0,dytot=cost>0?(dtot/cost)*100:0;
   return{sh,cost,avg,spot,mv,pl,plp,dbf,dcur,dtot,dy,dytot};
+}
+
+// ─── PIE CHART (pure SVG) ─────────────────────────────────────────────────
+function makePie(slices, size=140){
+  // slices: [{label, value, color}]
+  const total=slices.reduce((s,x)=>s+x.value,0);
+  if(!total)return'<div style="text-align:center;color:var(--gray);font-size:13px;padding:20px">No data</div>';
+  const cx=size/2,cy=size/2,r=size/2-6,ri=r*0.52;
+  let paths='',startAngle=-Math.PI/2;
+  for(const sl of slices){
+    const pct=sl.value/total;
+    const angle=pct*2*Math.PI;
+    const endAngle=startAngle+angle;
+    const x1=cx+r*Math.cos(startAngle),y1=cy+r*Math.sin(startAngle);
+    const x2=cx+r*Math.cos(endAngle),y2=cy+r*Math.sin(endAngle);
+    const xi1=cx+ri*Math.cos(startAngle),yi1=cy+ri*Math.sin(startAngle);
+    const xi2=cx+ri*Math.cos(endAngle),yi2=cy+ri*Math.sin(endAngle);
+    const large=angle>Math.PI?1:0;
+    const d=`M${xi1},${yi1} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${xi2},${yi2} A${ri},${ri} 0 ${large},0 ${xi1},${yi1}`;
+    paths+=`<path d="${d}" fill="${sl.color}" stroke="#fff" stroke-width="2"/>`;
+    startAngle=endAngle;
+  }
+  return`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" class="pie-svg">${paths}</svg>`;
+}
+
+// Colour palettes
+const TYPE_COLORS={ETF:'#007aff',Stock:'#34c759','Unit Trust':'#ff9500',Bond:'#af52de',Other:'#8e8e93'};
+const ACC_COLORS={Cash:'#34c759',SRS:'#ff9f0a',CPF:'#ff2d55'};
+const PROF_COLORS={Profit:'#34c759',Loss:'#ff3b30','Break-even':'#8e8e93'};
+
+// ─── Summary Page ─────────────────────────────────────────────────────────
+function renderSummary(){
+  if(!S.investments.length)return`
+    <div class="sumpage">
+      <div class="empty" style="padding-top:60px"><div class="ico">📊</div><div>No investments yet.<br>Add some from the Portfolio tab.</div></div>
+    </div>`;
+
+  const allStats=S.investments.map(inv=>({inv,s:calc(inv)}));
+  const totalMv=allStats.reduce((s,x)=>s+x.s.mv,0);
+  const totalCost=allStats.reduce((s,x)=>s+x.s.cost,0);
+  const totalPl=totalMv-totalCost;
+  const totalDiv=allStats.reduce((s,x)=>s+x.s.dtot,0);
+
+  // ── Group by Type ──
+  const typeKeys=['ETF','Stock','Unit Trust','Bond','Other'];
+  const byType={};
+  typeKeys.forEach(k=>{byType[k]={mv:0,cost:0,count:0,pl:0,div:0};});
+  allStats.forEach(({inv,s})=>{
+    const k=typeKeys.includes(inv.type)?inv.type:'Other';
+    byType[k].mv+=s.mv;byType[k].cost+=s.cost;byType[k].count++;byType[k].pl+=s.pl;byType[k].div+=s.dtot;
+  });
+  const typeSlices=typeKeys.filter(k=>byType[k].mv>0).map(k=>({label:k,value:byType[k].mv,color:TYPE_COLORS[k]}));
+
+  // ── Group by Account ──
+  const accKeys=['Cash','SRS','CPF'];
+  const byAcc={};
+  accKeys.forEach(k=>{byAcc[k]={mv:0,cost:0,count:0,pl:0,div:0};});
+  allStats.forEach(({inv,s})=>{
+    const k=accKeys.includes(inv.account)?inv.account:'Cash';
+    byAcc[k].mv+=s.mv;byAcc[k].cost+=s.cost;byAcc[k].count++;byAcc[k].pl+=s.pl;byAcc[k].div+=s.dtot;
+  });
+  const accSlices=accKeys.filter(k=>byAcc[k].mv>0).map(k=>({label:k,value:byAcc[k].mv,color:ACC_COLORS[k]}));
+
+  // ── Profitability ──
+  let profData={Profit:{mv:0,cost:0,count:0},Loss:{mv:0,cost:0,count:0},'Break-even':{mv:0,cost:0,count:0}};
+  allStats.forEach(({s})=>{
+    const k=s.pl>0.005?'Profit':s.pl<-0.005?'Loss':'Break-even';
+    profData[k].mv+=s.mv;profData[k].cost+=s.cost;profData[k].count++;
+  });
+  const profSlices=Object.entries(profData).filter(([,v])=>v.count>0).map(([k,v])=>({label:k,value:v.mv,color:PROF_COLORS[k]}));
+
+  // ── Top Holdings by MV ──
+  const topHoldings=[...allStats].sort((a,b)=>b.s.mv-a.s.mv).slice(0,6);
+  const maxMv=topHoldings[0]?.s.mv||1;
+
+  return`
+<div class="summary">
+  <div class="scard"><div class="lbl">Total Value</div><div class="val">${fc(totalMv,'SGD',0)}</div></div>
+  <div class="scard"><div class="lbl">Total Cost</div><div class="val">${fc(totalCost,'SGD',0)}</div></div>
+  <div class="scard"><div class="lbl">Total P&L</div><div class="val ${totalPl>=0?'pos':'neg'}">${totalPl>=0?'+':''}${fc(totalPl,'SGD',0)}</div></div>
+  <div class="scard"><div class="lbl">Total Div</div><div class="val" style="color:var(--purple)">${fc(totalDiv,'SGD',0)}</div></div>
+</div>
+
+<div class="sumpage">
+
+  <!-- ── BY INVESTMENT TYPE ── -->
+  <div class="sum-section">
+    <div class="sum-section-title">📂 By Investment Type</div>
+
+    <!-- Pie: Value by Type -->
+    <div class="pie-wrap">
+      <div class="pie-title">Market Value Allocation</div>
+      <div class="pie-body">
+        ${makePie(typeSlices)}
+        <div class="pie-legend">
+          ${typeSlices.map(sl=>{
+            const pct=totalMv>0?(sl.value/totalMv*100):0;
+            return`<div class="pie-leg-item">
+              <div class="pie-dot" style="background:${sl.color}"></div>
+              <span class="pie-leg-label">${sl.label}</span>
+              <span class="pie-leg-pct">${fmt(pct,1)}%</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakdown table by type -->
+    <div class="breakdown-card">
+      <div class="bk-hdr" style="grid-template-columns:1.4fr 1fr 1fr 1fr">
+        <span>Type</span><span>Mkt Value</span><span>P&L</span><span>Div Total</span>
+      </div>
+      ${typeKeys.filter(k=>byType[k].count>0).map(k=>{
+        const d=byType[k];
+        const plColor=d.pl>=0?'var(--green)':'var(--red)';
+        return`<div class="bk-row" style="grid-template-columns:1.4fr 1fr 1fr 1fr">
+          <div class="bk-label"><div class="bk-dot" style="background:${TYPE_COLORS[k]}"></div>${k}</div>
+          <div>${fc(d.mv,'SGD',0)}<div style="font-size:10px;color:var(--gray)">${d.count} holding${d.count>1?'s':''}</div></div>
+          <div style="color:${plColor};font-weight:700">${d.pl>=0?'+':''}${fc(d.pl,'SGD',0)}</div>
+          <div style="color:var(--purple);font-weight:700">${fc(d.div,'SGD',0)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <!-- ── BY ACCOUNT / PAYMENT MODE ── -->
+  <div class="sum-section">
+    <div class="sum-section-title">💳 By Payment Mode</div>
+
+    <div class="pie-wrap">
+      <div class="pie-title">Market Value by Account</div>
+      <div class="pie-body">
+        ${makePie(accSlices)}
+        <div class="pie-legend">
+          ${accSlices.map(sl=>{
+            const pct=totalMv>0?(sl.value/totalMv*100):0;
+            return`<div class="pie-leg-item">
+              <div class="pie-dot" style="background:${sl.color}"></div>
+              <span class="pie-leg-label">${sl.label}</span>
+              <span class="pie-leg-pct">${fmt(pct,1)}%</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="breakdown-card">
+      <div class="bk-hdr" style="grid-template-columns:1.1fr 1fr 1fr 1fr">
+        <span>Account</span><span>Mkt Value</span><span>P&L</span><span>Div Total</span>
+      </div>
+      ${accKeys.filter(k=>byAcc[k].count>0).map(k=>{
+        const d=byAcc[k];
+        const plColor=d.pl>=0?'var(--green)':'var(--red)';
+        return`<div class="bk-row" style="grid-template-columns:1.1fr 1fr 1fr 1fr">
+          <div class="bk-label"><div class="bk-dot" style="background:${ACC_COLORS[k]}"></div>${k}</div>
+          <div>${fc(d.mv,'SGD',0)}<div style="font-size:10px;color:var(--gray)">${d.count} holding${d.count>1?'s':''}</div></div>
+          <div style="color:${plColor};font-weight:700">${d.pl>=0?'+':''}${fc(d.pl,'SGD',0)}</div>
+          <div style="color:var(--purple);font-weight:700">${fc(d.div,'SGD',0)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <!-- ── PROFITABILITY ── -->
+  <div class="sum-section">
+    <div class="sum-section-title">📈 Profitability Breakdown</div>
+
+    <div class="pie-wrap">
+      <div class="pie-title">Portfolio Value by P&L Status</div>
+      <div class="pie-body">
+        ${makePie(profSlices)}
+        <div class="pie-legend">
+          ${profSlices.map(sl=>{
+            const pct=totalMv>0?(sl.value/totalMv*100):0;
+            return`<div class="pie-leg-item">
+              <div class="pie-dot" style="background:${sl.color}"></div>
+              <span class="pie-leg-label">${sl.label}</span>
+              <span class="pie-leg-pct">${fmt(pct,1)}%</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual profitability list -->
+    <div class="breakdown-card">
+      <div class="bk-hdr" style="grid-template-columns:1.8fr 1fr 1fr">
+        <span>Investment</span><span>P&L</span><span>P&L %</span>
+      </div>
+      ${[...allStats].sort((a,b)=>b.s.pl-a.s.pl).map(({inv,s})=>{
+        const isProfit=s.pl>=0;
+        return`<div class="bk-row ${isProfit?'prof-winner':'prof-loser'}" style="grid-template-columns:1.8fr 1fr 1fr">
+          <div>
+            <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${inv.name}</div>
+            <div style="font-size:10px;color:var(--gray)">${inv.ticker||''} · ${inv.type||''}</div>
+          </div>
+          <div style="color:${isProfit?'var(--green)':'var(--red)'};font-weight:700;font-size:13px">
+            ${isProfit?'+':''}${fc(s.pl,inv.currency,0)}
+          </div>
+          <div style="color:${isProfit?'var(--green)':'var(--red)'};font-weight:700;font-size:13px">
+            ${isProfit?'+':''}${fmt(s.plp,2)}%
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <!-- ── TOP HOLDINGS ── -->
+  <div class="sum-section">
+    <div class="sum-section-title">🏆 Top Holdings by Value</div>
+    <div class="breakdown-card">
+      ${topHoldings.map(({inv,s})=>{
+        const pct=totalMv>0?(s.mv/totalMv*100):0;
+        const barPct=maxMv>0?(s.mv/maxMv*100):0;
+        const typeColor=TYPE_COLORS[inv.type]||'#8e8e93';
+        return`<div class="holding-row">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%">${inv.name}</div>
+              <div style="font-weight:700;font-size:13px">${fc(s.mv,inv.currency,0)}</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+              <div style="font-size:10px;color:var(--gray)">${inv.ticker||''} · <span style="color:${typeColor};font-weight:600">${inv.type}</span> · ${inv.account}</div>
+              <div style="font-size:10px;color:var(--gray)">${fmt(pct,1)}% of portfolio</div>
+            </div>
+            <div class="holding-bar-bg">
+              <div class="holding-bar-fill" style="width:${barPct}%;background:${typeColor}"></div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
+</div>`;
 }
 
 // ─── Render ───────────────────────────────────────────────────────────────
 function render(){
   const invs=S.investments.filter(i=>(S.fCcy==='All'||i.currency===S.fCcy)&&(S.fAcc==='All'||i.account===S.fAcc));
   const all=S.investments.map(i=>calc(i));
-  const tC=all.reduce((s,x)=>s+x.cost,0),tM=all.reduce((s,x)=>s+x.mv,0),
-        tP=tM-tC,
-        tDbf=all.reduce((s,x)=>s+x.dbf,0),
-        tDcur=all.reduce((s,x)=>s+x.dcur,0),
-        tDtot=all.reduce((s,x)=>s+x.dtot,0);
+  const tC=all.reduce((s,x)=>s+x.cost,0),tM=all.reduce((s,x)=>s+x.mv,0),tP=tM-tC,
+        tDbf=all.reduce((s,x)=>s+x.dbf,0),tDcur=all.reduce((s,x)=>s+x.dcur,0),tDtot=all.reduce((s,x)=>s+x.dtot,0);
   document.getElementById('app').innerHTML=`
 <div class="header">
   <div style="display:flex;justify-content:space-between;align-items:center">
@@ -307,9 +549,10 @@ function render(){
   <div class="tabs">
     <button class="tab ${S.tab==='portfolio'?'active':''}" onclick="setTab('portfolio')">Portfolio</button>
     <button class="tab ${S.tab==='dividends'?'active':''}" onclick="setTab('dividends')">Dividends</button>
+    <button class="tab ${S.tab==='summary'?'active':''}" onclick="setTab('summary')">Summary</button>
   </div>
 </div>
-${S.tab==='portfolio'?renderPort(invs,tC,tM,tP,tDbf,tDcur,tDtot):renderDivs()}
+${S.tab==='portfolio'?renderPort(invs,tC,tM,tP,tDbf,tDcur,tDtot):S.tab==='dividends'?renderDivs():renderSummary()}
 ${renderModal()}`;
   document.querySelectorAll('.spi').forEach(el=>el.addEventListener('change',function(){
     const inv=S.investments.find(i=>i.id===this.dataset.id);
@@ -374,21 +617,18 @@ function renderCard(inv){
       </div>
     </div>
   </div>
-
   <div class="grid2">
     <div class="stat"><div class="sl">Units Held</div><div class="sv">${fmt(s.sh,4)}</div></div>
     <div class="stat"><div class="sl">Avg Cost</div><div class="sv">${fc(s.avg,inv.currency,4)}</div></div>
     <div class="stat"><div class="sl">Total Cost</div><div class="sv">${fc(s.cost,inv.currency)}</div></div>
     <div class="stat"><div class="sl">Mkt Value</div><div class="sv">${fc(s.mv,inv.currency)}</div></div>
     <div class="stat"><div class="sl">Unreal. P&L</div>
-      <div class="sv ${s.pl>=0?'pos':'neg'}">${s.pl>=0?'+':''}${fc(s.pl,inv.currency)}
-      <br><small>${s.pl>=0?'+':''}${fmt(s.plp,2)}%</small></div></div>
-    <div class="stat"><div class="sl">P&L vs Avg Cost</div>
-      <div class="sv ${s.pl>=0?'pos':'neg'}" style="font-size:11px">${fc(s.avg,inv.currency,4)}<br>
-      <small style="color:var(--gray)">breakeven</small></div></div>
+      <div class="sv ${s.pl>=0?'pos':'neg'}">${s.pl>=0?'+':''}${fc(s.pl,inv.currency)}<br>
+      <small>${s.pl>=0?'+':''}${fmt(s.plp,2)}%</small></div></div>
+    <div class="stat"><div class="sl">Breakeven</div>
+      <div class="sv" style="font-size:11px">${fc(s.avg,inv.currency,4)}<br>
+      <small style="color:var(--gray)">avg cost/unit</small></div></div>
   </div>
-
-  <!-- Dividend 3-column strip -->
   <div class="div-strip">
     <div class="div-strip-title">💰 Dividends Received</div>
     <div class="div-strip-grid">
@@ -423,7 +663,6 @@ function renderCard(inv){
       </div>
     </div>
   </div>
-
   <div class="actions">
     <button class="btn sm out" onclick="openTx('${inv.id}')">+ Transaction</button>
     <button class="btn sm out" onclick="openDiv('${inv.id}')">+ Dividend</button>
@@ -446,17 +685,11 @@ function renderTxs(inv){
     </div>
   </div>`).join('')}`;}
 
-// ─── Dividend Ledger Tab ──────────────────────────────────────────────────
 function renderDivs(){
   const divs=S.dividends.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-  // Portfolio-level totals
   const allStats=S.investments.map(i=>calc(i));
-  const totDbf=allStats.reduce((s,x)=>s+x.dbf,0);
-  const totDcur=allStats.reduce((s,x)=>s+x.dcur,0);
-  const totDtot=allStats.reduce((s,x)=>s+x.dtot,0);
-  const byInv={};
-  divs.forEach(d=>{if(!byInv[d.invId])byInv[d.invId]=[];byInv[d.invId].push(d);});
-
+  const totDbf=allStats.reduce((s,x)=>s+x.dbf,0),totDcur=allStats.reduce((s,x)=>s+x.dcur,0),totDtot=allStats.reduce((s,x)=>s+x.dtot,0);
+  const byInv={};divs.forEach(d=>{if(!byInv[d.invId])byInv[d.invId]=[];byInv[d.invId].push(d);});
   return`
 <div class="summary">
   <div class="scard"><div class="lbl">Accum. B/F</div><div class="val" style="color:#0369a1">${fc(totDbf,'SGD')}</div></div>
@@ -469,49 +702,27 @@ function renderDivs(){
     <span class="sec-ttl">Dividend Ledger</span>
     <button class="btn sm grn" onclick="openDivG()">+ Add</button>
   </div>
-  ${divs.length===0?`<div class="empty"><div class="ico">💰</div><div>No dividends recorded yet.<br>Tap <b>+ Add</b> to log one.</div></div>`:''}
+  ${divs.length===0?`<div class="empty"><div class="ico">💰</div><div>No dividends recorded yet.</div></div>`:''}
   ${Object.entries(byInv).map(([id,ds])=>{
     const inv=S.investments.find(i=>i.id===id);
-    const nm=inv?.name||'Unknown';
-    const ccy=inv?.currency||'SGD';
-    const bf =ds.filter(d=>d.date&&d.date.slice(0,4)<CY).reduce((s,d)=>s+(+d.amount||0),0);
+    const nm=inv?.name||'Unknown',ccy=inv?.currency||'SGD';
+    const bf=ds.filter(d=>d.date&&d.date.slice(0,4)<CY).reduce((s,d)=>s+(+d.amount||0),0);
     const cur=ds.filter(d=>d.date&&d.date.startsWith(CY)).reduce((s,d)=>s+(+d.amount||0),0);
     const tot=bf+cur;
-    // Group by year for the table
-    const byYr={};
-    ds.forEach(d=>{const y=(d.date||'????').slice(0,4);if(!byYr[y])byYr[y]=[];byYr[y].push(d);});
+    const byYr={};ds.forEach(d=>{const y=(d.date||'????').slice(0,4);if(!byYr[y])byYr[y]=[];byYr[y].push(d);});
     return`<div class="ledger-inv">
       <div class="ledger-inv-hdr">
         <span>${nm} <span style="font-size:11px;color:var(--gray);font-weight:500">${inv?.ticker||''}</span></span>
       </div>
-      <!-- 3-col summary -->
       <div class="ledger-summary">
-        <div class="ls-box bf">
-          <div class="ls-lbl">Accum. B/F</div>
-          <div class="ls-val">${fc(bf,ccy)}</div>
-          <div style="font-size:9px;color:var(--gray);margin-top:2px">Before ${CY}</div>
-        </div>
-        <div class="ls-box">
-          <div class="ls-lbl">Year ${CY}</div>
-          <div class="ls-val">${fc(cur,ccy)}</div>
-          <div style="font-size:9px;color:var(--gray);margin-top:2px">Current year</div>
-        </div>
-        <div class="ls-box tot">
-          <div class="ls-lbl">Accum. Total</div>
-          <div class="ls-val">${fc(tot,ccy)}</div>
-          <div style="font-size:9px;color:var(--gray);margin-top:2px">All time</div>
-        </div>
+        <div class="ls-box bf"><div class="ls-lbl">Accum. B/F</div><div class="ls-val">${fc(bf,ccy)}</div><div style="font-size:9px;color:var(--gray);margin-top:2px">Before ${CY}</div></div>
+        <div class="ls-box"><div class="ls-lbl">Year ${CY}</div><div class="ls-val">${fc(cur,ccy)}</div><div style="font-size:9px;color:var(--gray);margin-top:2px">Current year</div></div>
+        <div class="ls-box tot"><div class="ls-lbl">Accum. Total</div><div class="ls-val">${fc(tot,ccy)}</div><div style="font-size:9px;color:var(--gray);margin-top:2px">All time</div></div>
       </div>
-      <!-- Detail by year -->
       ${Object.entries(byYr).sort((a,b)=>b[0].localeCompare(a[0])).map(([yr,yds])=>{
         const ytot=yds.reduce((s,d)=>s+(+d.amount||0),0);
         return`<div class="div-yr-block">
-          <div class="div-yr-hdr">
-            <span>📅 ${yr}</span>
-            <span>${yds.length} entries</span>
-            <span></span>
-            <span style="color:var(--green);font-weight:700">${fc(ytot,ccy)}</span>
-          </div>
+          <div class="div-yr-hdr"><span>📅 ${yr}</span><span>${yds.length} entries</span><span></span><span style="color:var(--green);font-weight:700">${fc(ytot,ccy)}</span></div>
           ${yds.map(d=>`<div class="div-yr-row">
             <span>${d.date||'–'}</span>
             <span style="font-size:10px;color:var(--gray)">${d.divType||'Cash'}</span>
@@ -528,7 +739,6 @@ function renderDivs(){
 function renderModal(){
   if(!S.modal)return'';
   const ov=`class="overlay" onclick="bgClose(event)"`;
-
   if(S.modal==='addInv'||S.modal==='editInv'){
     const v=S.modal==='editInv'?S.investments.find(i=>i.id===S.editId):{};
     const isnew=S.modal==='addInv';
@@ -544,12 +754,8 @@ function renderModal(){
         <input id="fn" placeholder="e.g. Vanguard FTSE All-World" value="${v?.name||''}">
       </div>
       <div class="row2">
-        <div class="fg"><label>Ticker (auto-filled)</label>
-          <input id="ftk" placeholder="e.g. VWRA.L" value="${v?.ticker||''}">
-        </div>
-        <div class="fg"><label>ISIN (optional)</label>
-          <input id="fis" placeholder="IE00B3RBWM25" value="${v?.isin||''}">
-        </div>
+        <div class="fg"><label>Ticker (auto-filled)</label><input id="ftk" placeholder="e.g. VWRA.L" value="${v?.ticker||''}"></div>
+        <div class="fg"><label>ISIN (optional)</label><input id="fis" placeholder="IE00B3RBWM25" value="${v?.isin||''}"></div>
       </div>
       <div class="row2">
         <div class="fg"><label>Type</label>
@@ -573,7 +779,6 @@ function renderModal(){
         <button class="btn" onclick="saveInv()">${isnew?'Add & Fetch Price':'Save'}</button>
       </div>
     </div></div>`;}
-
   if(S.modal==='addTx'){
     const inv=S.investments.find(i=>i.id===S.txId);
     return`<div ${ov}><div class="modal">
@@ -596,7 +801,6 @@ function renderModal(){
         <button class="btn" onclick="saveTx()">Add</button>
       </div>
     </div></div>`;}
-
   if(S.modal==='addDiv'){
     return`<div ${ov}><div class="modal">
       <h2>Add Dividend</h2>
@@ -628,7 +832,6 @@ function openDiv(id){S.modal='addDiv';S.txId=id;render();}
 function openDivG(){S.modal='addDiv';S.txId=S.investments[0]?.id||null;render();}
 function closeM(){S.modal=null;S.editId=null;S.txId=null;S.acResults=[];S.acLoading=false;render();}
 function bgClose(e){if(e.target.classList.contains('overlay'))closeM();}
-
 function saveInv(){
   const name=document.getElementById('fn').value.trim();
   if(!name){alert('Investment name is required.');return;}
