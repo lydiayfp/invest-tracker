@@ -8,6 +8,1019 @@
 <meta name="apple-mobile-web-app-title" content="InvestTracker">
 <title>InvestTracker</title>
 <style>
+/* ── Reset ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh;-webkit-font-smoothing:antialiased}
+:root{
+  --blue:#007aff;--green:#34c759;--red:#ff3b30;--orange:#ff9500;--purple:#af52de;
+  --gray:#8e8e93;--gray2:#aeaeb2;
+  --card:#fff;--bg:#f2f2f7;--border:#e5e5ea;
+  --text:#1c1c1e;--text2:#3c3c43;--text3:#6d6d72;
+}
+
+/* ── Header ── */
+.hdr{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:52px 20px 0;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px}
+.hdr-left h1{font-size:21px;font-weight:700;letter-spacing:-.3px}
+.hdr-left .hdr-date{font-size:11px;color:var(--gray);margin-top:1px}
+.tabs{display:flex;background:#e5e5ea;border-radius:10px;padding:2px;margin-bottom:2px}
+.tab{flex:1;padding:7px 0;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:500;color:var(--gray);cursor:pointer;transition:all .2s}
+.tab.on{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+/* ── Summary Strip ── */
+.strip{display:flex;gap:8px;padding:12px 20px;overflow-x:auto;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.sc{flex-shrink:0;min-width:96px;background:var(--card);border-radius:12px;padding:10px 12px;border:1px solid var(--border)}
+.sc .sl{font-size:10px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px}
+.sc .sv{font-size:16px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+.sv.pos{color:var(--green)}.sv.neg{color:var(--red)}.sv.div{color:var(--purple)}.sv.bf{color:#0369a1}
+
+/* ── Collapsible Header ── */
+.coll{background:var(--card);cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:11px 14px;-webkit-tap-highlight-color:transparent}
+.coll:active{background:#f9f9f9}
+.coll-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+.coll-title .ct-count{font-size:11px;font-weight:500;color:var(--gray)}
+.chev{font-size:10px;color:var(--gray2);transition:transform .2s}
+.chev.open{transform:rotate(90deg)}
+
+/* ── Category Panel ── */
+.cat-panel{margin:0 20px 10px;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.cat-col-hdr{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;padding:6px 14px;background:#f8f8fa;border-bottom:1px solid var(--border);border-top:1px solid var(--border)}
+.cat-col-hdr span{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;text-align:right}
+.cat-col-hdr span:first-child{text-align:left}
+.cat-vrow{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;padding:9px 14px 4px;align-items:center}
+.cat-label{display:flex;align-items:flex-start;gap:6px}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.cat-name{font-size:12px;font-weight:700}
+.cat-meta{font-size:9px;color:var(--gray);margin-top:1px}
+.cat-cell{text-align:right}
+.cat-v{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.cat-s{font-size:9px;color:var(--gray);margin-top:1px}
+.cat-v.pos{color:var(--green)}.cat-v.neg{color:var(--red)}
+/* Div sub-row */
+.cat-drow{display:grid;grid-template-columns:1fr 1fr 1fr;padding:5px 14px 9px 30px;border-bottom:1px solid var(--border)}
+.cat-dcell{text-align:center;position:relative;padding:3px 4px}
+.cat-dcell:not(:last-child)::after{content:'';position:absolute;right:0;top:15%;bottom:15%;width:1px;background:var(--border)}
+.cdl{font-size:9px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.cdv{font-size:12px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.cdv.bf{color:#0369a1}.cdv.cy{color:var(--green)}.cdv.tot{color:var(--purple)}
+/* Total rows */
+.cat-tot-v{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;padding:8px 14px;background:#eff6ff;border-top:1.5px solid #bae6fd;align-items:center}
+.cat-tot-d{display:grid;grid-template-columns:1fr 1fr 1fr;padding:6px 14px 8px 30px;background:#f5f0ff;border-top:1px solid #e9d5ff}
+
+/* ── Search ── */
+.search-wrap{padding:8px 20px 4px;position:relative}
+.search-wrap input{width:100%;padding:9px 34px 9px 34px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;background:#fff;outline:none;color:var(--text);font-family:inherit}
+.search-wrap input:focus{border-color:var(--blue)}
+.s-ico{position:absolute;left:32px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;color:var(--gray)}
+.s-clr{position:absolute;right:30px;top:50%;transform:translateY(-50%);font-size:16px;cursor:pointer;border:none;background:none;color:var(--gray);padding:2px;line-height:1}
+
+/* ── Filter Bar ── */
+.fbar{display:flex;gap:6px;padding:6px 20px 8px;overflow-x:auto;scrollbar-width:none}
+.fbar::-webkit-scrollbar{display:none}
+.fc{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;color:var(--text2);transition:all .15s}
+.fc.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.fsep{width:1px;background:var(--border);flex-shrink:0;align-self:stretch;margin:1px 2px}
+
+/* ── Section Title ── */
+.sec-row{display:flex;justify-content:space-between;align-items:center;padding:4px 20px 8px}
+.sec-title{font-size:17px;font-weight:700;letter-spacing:-.2px;text-align:center;width:100%}
+
+/* ── Investment Card ── */
+.holdings{padding:0 20px 100px}
+.icard{background:var(--card);border-radius:14px;margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
+
+/* Card header — always visible */
+.icard-hdr{padding:13px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.icard-hdr:active{background:#fafafa}
+.ic-left{flex:1;min-width:0}
+.ic-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.ic-tkr{font-size:11px;color:var(--gray);margin-bottom:4px}
+.ic-tkr b{color:var(--text2)}
+.ic-badges{display:flex;gap:4px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#e5e5ea;color:var(--text2)}
+.badge.usd{background:#dbeafe;color:#1d4ed8}.badge.sgd{background:#dcfce7;color:#15803d}
+.badge.gbp{background:#f3e8ff;color:#7e22ce}.badge.eur{background:#fff7ed;color:#c2410c}
+.badge.hkd{background:#fef9c3;color:#a16207}
+.badge.cash{background:#dcfce7;color:#166534}.badge.srs{background:#fef9c3;color:#854d0e}.badge.cpf{background:#fce7f3;color:#9d174d}
+/* Price area */
+.ic-right{text-align:right;flex-shrink:0;min-width:105px}
+.ic-pbadge-row{display:flex;justify-content:flex-end;align-items:center;gap:4px;margin-bottom:3px}
+.pbadge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:5px}
+.pbadge.live{background:#dcfce7;color:#15803d}
+.pbadge.isin{background:#dbeafe;color:#1d4ed8}
+.pbadge.figi{background:#fce7f3;color:#9d174d}
+.pbadge.manual{background:#f2f2f7;color:var(--gray)}
+.pref-btn{border:1px solid var(--border);background:#fff;border-radius:6px;padding:2px 6px;font-size:10px;cursor:pointer;color:var(--blue);font-weight:600;font-family:inherit}
+.ic-price{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.ic-chg{font-size:11px;font-weight:600;margin-top:1px;font-variant-numeric:tabular-nums}
+.ic-chg.pos{color:var(--green)}.ic-chg.neg{color:var(--red)}
+.ic-ts{font-size:9px;color:var(--gray2);margin-top:1px}
+.ic-via{font-size:9px;color:var(--blue);margin-top:1px}
+/* Quick P&L shown when card is collapsed */
+.ic-qpl{font-size:11px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums;text-align:right}
+.ic-qpl.pos{color:var(--green)}.ic-qpl.neg{color:var(--red)}.ic-qpl.zero{color:var(--gray)}
+/* Expand indicator */
+.ic-expand{font-size:10px;color:var(--gray2);display:flex;align-items:center;justify-content:flex-end;gap:3px;margin-top:4px}
+
+/* ── Card Body ── */
+.icard-body{border-top:1px solid var(--border)}
+
+/* Stats */
+.stat-block{padding:12px 14px 6px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 0 10px}
+.stat-lbl{font-size:10px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.stat-val{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat-val.pos{color:var(--green)}.stat-val.neg{color:var(--red)}
+
+/* P&L Banner */
+.pl-banner{margin:0 14px 12px;padding:10px 12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+.pl-banner.pos{background:#f0fdf4;border:1px solid #bbf7d0}
+.pl-banner.neg{background:#fff5f5;border:1px solid #fecaca}
+.pl-banner.zero{background:#f8f8fa;border:1px solid var(--border)}
+.pl-lbl{font-size:11px;font-weight:600;color:var(--gray)}
+.pl-right{text-align:right}
+.pl-val{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.pl-val.pos{color:var(--green)}.pl-val.neg{color:var(--red)}.pl-val.zero{color:var(--gray)}
+.pl-pct{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
+.pl-pct.pos{color:var(--green)}.pl-pct.neg{color:var(--red)}
+
+/* Manual Price */
+.manual-row{padding:0 14px 10px;display:flex;align-items:center;gap:8px}
+.manual-row label{font-size:11px;color:var(--gray);font-weight:500;white-space:nowrap}
+.spi{flex:1;border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;background:#fafafa;outline:none;font-variant-numeric:tabular-nums;font-family:inherit}
+.spi:focus{border-color:var(--blue)}
+
+/* ISIN info */
+.isin-info{margin:0 14px 8px;padding:7px 10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:11px;color:#1d4ed8;line-height:1.4}
+
+/* Dividend Section in Card */
+.div-sub-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:#f6fef9;border-top:1px solid #d1fae5;cursor:pointer}
+.div-sub-hdr:active{background:#ecfdf5}
+.div-sub-title{font-size:11px;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.4px}
+/* 3-column dividend display */
+.div3{display:grid;grid-template-columns:1fr 1fr 1fr;padding:8px 14px 6px;background:#fafffe}
+.d3c{text-align:center;position:relative;padding:2px 4px}
+.d3c:not(:last-child)::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:#d1fae5}
+.d3l{font-size:9px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.3px}
+.d3v{font-size:12px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.d3v.bf{color:#0369a1}.d3v.cy{color:var(--green)}.d3v.tot{color:var(--purple)}
+.d3s{font-size:9px;color:#9ca3af;margin-top:0}
+/* Yield row */
+.div-yields{display:flex;padding:4px 14px 9px;background:#fafffe;border-bottom:1px solid #d1fae5}
+.dy-cell{flex:1;text-align:center;position:relative}
+.dy-cell:not(:last-child)::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:#d1fae5}
+.dy-l{font-size:9px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.dy-v{font-size:12px;font-weight:700;margin-top:1px;font-variant-numeric:tabular-nums}
+
+/* Transactions Section in Card */
+.tx-sub-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-top:1px solid var(--border);cursor:pointer;background:#f9f9fb}
+.tx-sub-hdr:active{background:#f2f2f5}
+.tx-sub-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px}
+.tx-item{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-top:.5px solid var(--border);gap:8px}
+.tx-l{flex:1;min-width:0}
+.tx-type{font-weight:700;font-size:12px}
+.tx-type.buy{color:var(--blue)}.tx-type.sell{color:var(--red)}.tx-type.rights{color:var(--orange)}.tx-type.free{color:var(--green)}
+.tx-date{color:var(--gray);font-size:11px;margin-left:5px}
+.tx-note{color:var(--gray2);font-size:10px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx-r{text-align:right;flex-shrink:0}
+.tx-units{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.tx-price{font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums}
+.tx-fee{font-size:10px;color:var(--gray2);font-variant-numeric:tabular-nums}
+.tx-btns{display:flex;gap:3px;flex-shrink:0}
+.show-all-btn{width:100%;padding:8px;font-size:12px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;border-top:.5px solid var(--border);font-family:inherit}
+
+/* Card Actions */
+.card-actions{display:flex;gap:7px;padding:10px 14px;border-top:1px solid var(--border);flex-wrap:wrap;background:#fafafa}
+
+/* ── Buttons ── */
+.btn{background:var(--blue);color:#fff;border:none;border-radius:9px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;font-family:inherit}
+.btn:active{opacity:.75}
+.btn.sm{padding:5px 12px;font-size:12px;border-radius:7px}
+.btn.xs{padding:3px 8px;font-size:11px;border-radius:6px}
+.btn.out{background:transparent;color:var(--blue);border:1px solid var(--blue)}
+.btn.red{background:var(--red)}.btn.grn{background:var(--green)}.btn.amber{background:var(--orange)}
+.btn.raf{background:linear-gradient(135deg,#007aff,#5856d6);display:flex;align-items:center;gap:5px;font-size:13px;padding:7px 13px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── Year-end Banner ── */
+.yr-banner{margin:4px 20px 8px;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:11px 13px;display:flex;gap:9px;align-items:flex-start}
+.yr-ico{font-size:18px;flex-shrink:0}
+.yr-txt{font-size:11px;color:#92400e;line-height:1.5;font-weight:500}
+.yr-txt b{color:#78350f}
+
+/* ── Modal ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:20px 20px 44px;width:100%;max-width:430px;max-height:92vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--gray);text-align:center;margin-bottom:14px}
+.fg{margin-bottom:11px;position:relative}
+.fg label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:4px}
+.fg input,.fg select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:11px;font-size:15px;background:#fff;-webkit-appearance:none;appearance:none;font-family:inherit;color:var(--text);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--blue)}
+.fg .hint{font-size:11px;color:var(--gray);margin-top:3px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.m-actions{display:flex;gap:9px;margin-top:16px}
+.m-actions .btn{flex:1;padding:13px;font-size:15px}
+/* Autocomplete */
+.ac-drop{position:absolute;left:0;right:0;top:calc(100% - 2px);background:#fff;border:1.5px solid var(--blue);border-top:none;border-radius:0 0 11px 11px;z-index:50;max-height:200px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.ac-item{padding:10px 13px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.ac-item:last-child{border-bottom:none}
+.ac-item:active{background:#f0f7ff}
+.ac-name{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-sym{font-size:11px;font-weight:700;color:var(--blue)}
+.ac-ex{font-size:10px;color:var(--gray)}
+.ac-loading{padding:14px;text-align:center;color:var(--gray);font-size:13px}
+
+/* ── Spin ── */
+.spin{display:inline-block;width:11px;height:11px;border:2px solid #e5e5ea;border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Dividend Ledger ── */
+.div-page{padding:0 20px 100px}
+.led-card{background:var(--card);border-radius:14px;margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
+.led-hdr{padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.led-hdr:active{background:#fafafa}
+.led-name{font-size:13px;font-weight:700}
+.led-tkr{font-size:11px;color:var(--gray);margin-top:1px}
+.led-right{text-align:right}
+.led-total{font-size:14px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+.led-sub{font-size:10px;color:var(--gray);margin-top:1px}
+/* Summary 3-col */
+.led-sum{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border)}
+.ls-cell{text-align:center;padding:9px 6px;position:relative}
+.ls-cell:not(:last-child)::after{content:'';position:absolute;right:0;top:15%;bottom:15%;width:1px;background:var(--border)}
+.ls-l{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.ls-v{font-size:13px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+.ls-v.bf{color:#0369a1}.ls-v.cy{color:var(--green)}.ls-v.tot{color:var(--purple)}
+.ls-s{font-size:9px;color:var(--gray2);margin-top:1px}
+/* Year group */
+.led-yr-hdr{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:#f8f8fa;border-top:1px solid var(--border);cursor:pointer}
+.led-yr-hdr:active{background:#f0f0f5}
+.led-yr-l{font-size:12px;font-weight:700;color:var(--text2)}
+.led-yr-r{font-size:12px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+/* Div entry */
+.div-entry{display:grid;grid-template-columns:88px 50px 1fr 55px;gap:6px;padding:8px 14px;border-top:.5px solid var(--border);font-size:12px;align-items:center}
+.de-date{color:var(--text2);font-variant-numeric:tabular-nums;font-size:11px}
+.de-type{font-size:10px;color:var(--gray)}
+.de-amt{font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+.de-btns{display:flex;gap:3px;justify-content:flex-end}
+
+/* ── Summary Page ── */
+.sum-page{padding:0 20px 100px}
+.sum-sec{background:var(--card);border-radius:14px;margin-bottom:10px;border:1px solid var(--border);overflow:hidden}
+/* Pie */
+.pie-body{display:flex;align-items:center;gap:14px;padding:12px 14px 14px}
+.pie-legend{flex:1;display:flex;flex-direction:column;gap:7px}
+.pl-row{display:flex;align-items:center;gap:7px}
+.p-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.p-name{font-size:12px;flex:1;color:var(--text)}
+.p-pct{font-size:11px;font-weight:700;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}
+/* Breakdown table */
+.bk{border-top:1px solid var(--border)}
+.bk-hdr{display:grid;padding:6px 14px;background:#f8f8fa}
+.bk-hdr span{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;text-align:right}
+.bk-hdr span:first-child{text-align:left}
+.bk-row{display:grid;padding:9px 14px;border-top:1px solid var(--border);align-items:center}
+.bk-lbl{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700}
+.bk-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.bk-c{text-align:right;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.bk-c.pos{color:var(--green)}.bk-c.neg{color:var(--red)}.bk-c.div{color:var(--purple)}
+.bk-s{font-size:10px;color:var(--gray);font-weight:500}
+.pw{background:#f7fef9}.pl{background:#fffafa}
+/* Top holdings */
+.hold-row{padding:10px 14px;border-top:1px solid var(--border)}
+.hold-top{display:flex;justify-content:space-between;align-items:center}
+.hold-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}
+.hold-val{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.hold-meta{display:flex;justify-content:space-between;margin-top:2px}
+.hold-ml{font-size:10px;color:var(--gray)}.hold-mr{font-size:10px;color:var(--gray)}
+.hold-bar{height:3px;border-radius:2px;margin-top:5px;background:var(--border)}
+.hold-fill{height:3px;border-radius:2px}
+
+/* ── Empty / no results ── */
+.empty{text-align:center;padding:48px 20px;color:var(--gray)}
+.empty .ei{font-size:36px;margin-bottom:10px}
+.empty .em{font-size:14px;font-weight:500}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:90vw}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+'use strict';
+const NOW=new Date(),CY=NOW.getFullYear().toString(),CMONTH=NOW.getMonth(),NY=(NOW.getFullYear()+1).toString();
+const TC={ETF:'#007aff',Stock:'#34c759','Unit Trust':'#ff9500',Bond:'#af52de',Other:'#8e8e93'};
+const TF={ETF:'#1d4ed8',Stock:'#166534','Unit Trust':'#c2410c',Bond:'#7e22ce',Other:'#6b7280'};
+const AC={Cash:'#34c759',SRS:'#ff9f0a',CPF:'#ff2d55'};
+const PC={Profit:'#34c759',Loss:'#ff3b30','Break-even':'#8e8e93'};
+const PROXY='https://corsproxy.io/?';
+
+// ─── Price Engine ─────────────────────────────────────────────────────────
+async function yf(p){const r=await fetch(PROXY+encodeURIComponent('https://query1.finance.yahoo.com'+p),{headers:{'x-requested-with':'XMLHttpRequest'}});if(!r.ok)throw new Error(r.status);return r.json();}
+async function yf2(p){const r=await fetch(PROXY+encodeURIComponent('https://query2.finance.yahoo.com'+p),{headers:{'x-requested-with':'XMLHttpRequest'}});if(!r.ok)throw new Error(r.status);return r.json();}
+async function fetchDirect(sym){const j=await yf(`/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=1d`);const m=j?.chart?.result?.[0]?.meta;if(!m)throw new Error('no meta');const p=m.regularMarketPrice||m.previousClose;if(!p)throw new Error('no price');const pv=m.chartPreviousClose||m.previousClose||p;return{price:p,change:p-pv,changePct:pv>0?((p-pv)/pv)*100:0,currency:m.currency||''};}
+async function yfSearch(q){try{const j=await yf2(`/v1/finance/search?q=${encodeURIComponent(q)}&quotesCount=8&newsCount=0&enableFuzzyQuery=false&enableCb=false`);return(j?.quotes||[]).filter(x=>x.symbol&&!['FUTURE','OPTION','CURRENCY','CRYPTOCURRENCY'].includes(x.quoteType));}catch(e){return[];}}
+async function figi(isin){try{const r=await fetch('https://api.openfigi.com/v3/mapping',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify([{idType:'ID_ISIN',idValue:isin}])});if(!r.ok)return[];return(await r.json())?.[0]?.data||[];}catch(e){return[];}}
+function xsfx(ec){const M={SG:'.SI',LN:'.L',HK:'.HK',GY:'.DE',FP:'.PA',SM:'.MC',IM:'.MI',AV:'.VI',NA:'.AS',BB:'.BR',SW:'.SW',AU:'.AX',JP:'.T',KS:'.KS',TW:'.TW',US:'',UN:'',UA:'',UW:'',UR:'',UT:'',UP:''};return Object.prototype.hasOwnProperty.call(M,ec)?M[ec]:undefined;}
+async function resolve(inv){
+  const tk=(inv.ticker||'').trim().toUpperCase(),is=(inv.isin||'').trim().toUpperCase();
+  if(inv.resolvedTicker&&inv.resolvedTicker!==tk){try{const r=await fetchDirect(inv.resolvedTicker);return{...r,resolvedTicker:inv.resolvedTicker,resolvedBy:'cached'};}catch(e){inv.resolvedTicker=null;}}
+  if(tk){
+    try{return{...await fetchDirect(tk),resolvedTicker:tk,resolvedBy:'ticker'};}catch(e){}
+    if(/^\d{4,8}$/.test(tk)){try{return{...await fetchDirect(tk+'.SI'),resolvedTicker:tk+'.SI',resolvedBy:'SGX'};}catch(e){}}
+    for(const q of(await yfSearch(tk)).slice(0,4)){try{return{...await fetchDirect(q.symbol),resolvedTicker:q.symbol,resolvedBy:'ticker-search'};}catch(e){}}
+  }
+  if(is){
+    for(const q of(await yfSearch(is)).slice(0,6)){try{return{...await fetchDirect(q.symbol),resolvedTicker:q.symbol,resolvedBy:'ISIN→YF'};}catch(e){}}
+    const fl=await figi(is);
+    const pt=['Open-End Fund','Exchange-Traded Fund','Common Stock','Closed-End Fund'];
+    fl.sort((a,b)=>{const ai=pt.indexOf(a.securityType2||a.securityType||'');const bi=pt.indexOf(b.securityType2||b.securityType||'');return(ai<0?99:ai)-(bi<0?99:bi);});
+    for(const f of fl.slice(0,10)){if(!f.ticker)continue;const s=xsfx(f.exchCode);if(s===undefined)continue;try{return{...await fetchDirect(f.ticker+s),resolvedTicker:f.ticker+s,resolvedBy:'ISIN→OpenFIGI'};}catch(e){}}
+  }
+  return null;
+}
+async function searchTicker(q){const j=await yf2(`/v1/finance/search?q=${encodeURIComponent(q)}&quotesCount=8&newsCount=0&enableFuzzyQuery=true&enableCb=false`);return(j?.quotes||[]).filter(x=>x.symbol&&x.quoteType&&!['FUTURE','OPTION','CURRENCY'].includes(x.quoteType)).map(x=>({symbol:x.symbol,name:x.shortname||x.longname||x.symbol,exchange:x.exchange||'',type:x.typeDisp||x.quoteType||''}));}
+function rblabel(by){return{ticker:'Ticker',SGX:'SGX',cached:'Cached','ticker-search':'Search','ISIN→YF':'ISIN/Yahoo','ISIN→OpenFIGI':'ISIN/FIGI'}[by]||by||'';}
+
+// ─── State ────────────────────────────────────────────────────────────────
+let S={
+  investments:[],dividends:[],tab:'portfolio',fCcy:'All',fAcc:'All',
+  modal:null,editId:null,txId:null,txEditInvId:null,txEditId:null,divEditId:null,
+  refreshing:{},refreshingAll:false,
+  acResults:[],acLoading:false,acQuery:'',acTimer:null,
+  searchQuery:'',
+  // Collapsible state
+  catOpen:true,
+  expanded:new Set(),   // card bodies expanded
+  divOpen:new Set(),    // dividend sections open in cards
+  txOpen:new Set(),     // tx sections open in cards
+  showAllTx:{},         // show all tx in a card
+  ledOpen:new Set(),    // ledger investment bodies open
+  ledYrOpen:{},         // ledger year groups open
+  sumSec:{type:true,acc:true,prof:true,top:true}
+};
+try{const d=JSON.parse(localStorage.getItem('it2025')||'{}');S.investments=d.i||[];S.dividends=d.d||[];}catch(e){}
+// Restore sets from plain arrays after load
+['expanded','divOpen','txOpen','ledOpen'].forEach(k=>{S[k]=new Set();});
+
+function save(){try{localStorage.setItem('it2025',JSON.stringify({i:S.investments,d:S.dividends}));}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function fmt(n,dp=2){if(n==null||isNaN(n))return'–';return Number(n).toLocaleString('en-SG',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function fc(n,c,dp=2){const m={SGD:'S$',USD:'US$',GBP:'£',EUR:'€',HKD:'HK$'};const s=m[c]||(c?c+' ':'');if(n==null||isNaN(n))return s+'–';return(n<0?'-':'')+s+Math.abs(n).toLocaleString('en-SG',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function toast(msg,dur=3000){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);}
+function tsAgo(ts){if(!ts)return'';const m=Math.round((Date.now()-ts)/60000);if(m<1)return'just now';if(m<60)return m+'m ago';const h=Math.round(m/60);return h<24?h+'h ago':Math.round(h/24)+'d ago';}
+
+// ─── Price ────────────────────────────────────────────────────────────────
+async function refreshOne(id){
+  const inv=S.investments.find(i=>i.id===id);if(!inv)return;
+  if(!inv.ticker&&!inv.isin){toast('Add a ticker or ISIN first.');return;}
+  S.refreshing[id]=true;render();
+  try{const r=await resolve(inv);if(r?.price){inv.spotPrice=r.price;inv.priceChange=r.change;inv.priceChangePct=r.changePct;inv.priceUpdated=Date.now();inv.priceAuto=true;inv.resolvedTicker=r.resolvedTicker||null;inv.resolvedBy=r.resolvedBy||null;save();toast('✓ '+inv.name+' — '+fc(r.price,inv.currency,3)+' ('+rblabel(r.resolvedBy)+')');}else{inv.priceAuto=false;save();toast('No price found for '+inv.name+'. Enter manually.');}}catch(e){toast('Error: '+e.message);}
+  S.refreshing[id]=false;render();
+}
+async function refreshAll(){
+  const list=S.investments.filter(i=>i.ticker||i.isin);
+  if(!list.length){toast('No tickers or ISINs set yet.');return;}
+  S.refreshingAll=true;render();let ok=0,fail=0;
+  await Promise.all(list.map(async inv=>{S.refreshing[inv.id]=true;try{const r=await resolve(inv);if(r?.price){inv.spotPrice=r.price;inv.priceChange=r.change;inv.priceChangePct=r.changePct;inv.priceUpdated=Date.now();inv.priceAuto=true;inv.resolvedTicker=r.resolvedTicker||null;inv.resolvedBy=r.resolvedBy||null;ok++;}else{fail++;}}catch(e){fail++;}S.refreshing[inv.id]=false;}));
+  S.refreshingAll=false;save();toast(ok+' updated'+(fail?' · '+fail+' not found':''));render();
+}
+setInterval(()=>{if(!document.hidden&&S.investments.some(i=>i.ticker||i.isin))refreshAll();},5*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.investments.some(i=>i.ticker||i.isin))refreshAll();});
+
+// ─── Autocomplete ─────────────────────────────────────────────────────────
+function onNameInput(val){
+  clearTimeout(S.acTimer);S.acQuery=val;S.acResults=[];
+  if(val.length<2){S.acLoading=false;renderAC();return;}
+  S.acLoading=true;renderAC();
+  S.acTimer=setTimeout(async()=>{try{const r=await searchTicker(val);if(S.acQuery===val){S.acResults=r;S.acLoading=false;renderAC();}}catch(e){S.acLoading=false;renderAC();}},400);
+}
+function renderAC(){
+  const d=document.getElementById('ac-drop');if(!d)return;
+  if(S.acLoading){d.innerHTML='<div class="ac-loading"><span class="spin"></span> Searching…</div>';d.style.display='block';return;}
+  if(!S.acResults.length){d.style.display='none';return;}
+  d.innerHTML=S.acResults.map((r,i)=>`<div class="ac-item" onclick="pickAC(${i})"><div style="display:flex;justify-content:space-between"><span class="ac-name">${r.name}</span><span class="ac-sym">${r.symbol}</span></div><span class="ac-ex">${r.exchange} · ${r.type}</span></div>`).join('');
+  d.style.display='block';
+}
+function pickAC(i){
+  const r=S.acResults[i];
+  const ne=document.getElementById('fn'),te=document.getElementById('ftk');
+  if(ne&&!ne.value)ne.value=r.name;if(te)te.value=r.symbol;
+  const cc={NMS:'USD',NYQ:'USD',NGM:'USD',LSE:'GBP',SES:'SGD',HKG:'HKD',FRA:'EUR',EPA:'EUR'};
+  const ccy=cc[r.exchange]||'';if(ccy){const e=document.getElementById('fc2');if(e)e.value=ccy;}
+  const mm={NMS:'NASDAQ',NYQ:'NYSE',NGM:'NASDAQ',LSE:'LSE',SES:'SGX',HKG:'HKEX'};
+  const mkt=mm[r.exchange]||'Other';const me=document.getElementById('fm');if(me)me.value=mkt;
+  S.acResults=[];S.acLoading=false;const d=document.getElementById('ac-drop');if(d)d.style.display='none';
+}
+
+// ─── Calc ─────────────────────────────────────────────────────────────────
+function calc(inv){
+  let sh=0,cost=0;
+  for(const t of(inv.transactions||[])){const u=+t.shares||0,p=+t.price||0,f=+t.fees||0;if(t.type==='Buy'){cost+=u*p+f;sh+=u;}else if(t.type==='Sell'){const ac=sh>0?cost/sh:0;cost-=u*ac;sh-=u;}else if(t.type==='Rights Issue'){cost+=u*p+f;sh+=u;}else if(t.type==='Free Issue'){sh+=u;}}
+  const bk=sh>0?cost/sh:0,spot=+inv.spotPrice||0,mv=spot*sh,pl=mv-cost,plp=cost>0?(pl/cost)*100:0;
+  const myD=S.dividends.filter(d=>d.invId===inv.id);
+  const dbf=myD.filter(d=>d.date&&d.date.slice(0,4)<CY).reduce((s,d)=>s+(+d.amount||0),0);
+  const dcur=myD.filter(d=>d.date&&d.date.startsWith(CY)).reduce((s,d)=>s+(+d.amount||0),0);
+  const dtot=dbf+dcur,dy=cost>0?(dcur/cost)*100:0,dytot=cost>0?(dtot/cost)*100:0;
+  return{sh,cost,bk,spot,mv,pl,plp,dbf,dcur,dtot,dy,dytot};
+}
+
+// ─── Pie ──────────────────────────────────────────────────────────────────
+function pie(slices,sz=130){
+  const tot=slices.reduce((s,x)=>s+x.v,0);
+  if(!tot)return'<div style="padding:20px;text-align:center;color:var(--gray);font-size:13px">No data</div>';
+  const cx=sz/2,cy=sz/2,r=sz/2-5,ri=r*.52;
+  let paths='',a=-Math.PI/2;
+  for(const s of slices){const da=(s.v/tot)*2*Math.PI,ea=a+da;const x1=cx+r*Math.cos(a),y1=cy+r*Math.sin(a),x2=cx+r*Math.cos(ea),y2=cy+r*Math.sin(ea);const xi1=cx+ri*Math.cos(a),yi1=cy+ri*Math.sin(a),xi2=cx+ri*Math.cos(ea),yi2=cy+ri*Math.sin(ea);const lg=da>Math.PI?1:0;paths+=`<path d="M${xi1},${yi1}L${x1},${y1}A${r},${r} 0 ${lg},1 ${x2},${y2}L${xi2},${yi2}A${ri},${ri} 0 ${lg},0 ${xi1},${yi1}" fill="${s.c}" stroke="#fff" stroke-width="1.5"/>`;a=ea;}
+  return`<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="flex-shrink:0">${paths}</svg>`;
+}
+
+// ─── Year-end Banner ──────────────────────────────────────────────────────
+function yrBanner(){
+  if(CMONTH<10)return'';
+  const aS=S.investments.map(i=>calc(i));
+  const tot=aS.reduce((s,x)=>s+x.dtot,0),cur=aS.reduce((s,x)=>s+x.dcur,0);
+  const d=Math.ceil((new Date(NOW.getFullYear(),11,31)-NOW)/(864e5));
+  return`<div class="yr-banner"><div class="yr-ico">🔔</div><div class="yr-txt"><b>${d} day${d!==1?'s':''} left in ${CY}</b><br>On 1 Jan ${NY}, dividends of <b>${fc(cur,'SGD')}</b> auto-roll to Accum. B/F. Total carry-forward: <b>${fc(tot,'SGD')}</b>.</div></div>`;
+}
+
+// ─── Category Breakdown ───────────────────────────────────────────────────
+function catBreakdown(tC,tM,tP,tDbf,tDcur,tDtot){
+  const TK=['ETF','Stock','Unit Trust','Bond','Other'];
+  const bt={};TK.forEach(k=>{bt[k]={cost:0,mv:0,pl:0,dbf:0,dcur:0,dtot:0,n:0};});
+  S.investments.forEach(inv=>{const s=calc(inv);const k=TK.includes(inv.type)?inv.type:'Other';bt[k].cost+=s.cost;bt[k].mv+=s.mv;bt[k].pl+=s.pl;bt[k].dbf+=s.dbf;bt[k].dcur+=s.dcur;bt[k].dtot+=s.dtot;bt[k].n++;});
+  const active=TK.filter(k=>bt[k].n>0);
+  if(!active.length)return'';
+  const open=S.catOpen;
+  return`<div class="cat-panel">
+  <div class="coll" onclick="toggleCat()">
+    <div class="coll-title">Breakdown by Category <span class="ct-count">${active.length} type${active.length>1?'s':''}</span></div>
+    <span class="chev ${open?'open':''}">▶</span>
+  </div>
+  ${open?`
+  <div class="cat-col-hdr"><span>Category</span><span>Cost</span><span>Mkt Value</span><span>P &amp; L</span></div>
+  ${active.map(k=>{const d=bt[k];const pp=d.cost>0?(d.pl/d.cost*100):0;const pos=d.pl>=0;return`
+  <div class="cat-vrow">
+    <div class="cat-label"><div class="cat-dot" style="background:${TC[k]}"></div><div><div class="cat-name" style="color:${TF[k]}">${k}</div><div class="cat-meta">${d.n} holding${d.n>1?'s':''}</div></div></div>
+    <div class="cat-cell"><div class="cat-v">${fc(d.cost,'SGD',0)}</div><div class="cat-s">${tC>0?fmt(d.cost/tC*100,1):0}%</div></div>
+    <div class="cat-cell"><div class="cat-v">${fc(d.mv,'SGD',0)}</div><div class="cat-s">${tM>0?fmt(d.mv/tM*100,1):0}%</div></div>
+    <div class="cat-cell"><div class="cat-v ${pos?'pos':'neg'}">${pos?'+':''}${fc(d.pl,'SGD',0)}</div><div class="cat-s ${pos?'pos':'neg'}">${pos?'+':''}${fmt(pp,2)}%</div></div>
+  </div>
+  <div class="cat-drow">
+    <div class="cat-dcell"><div class="cdl">Accum. B/F</div><div class="cdv bf">${fc(d.dbf,'SGD',0)}</div></div>
+    <div class="cat-dcell"><div class="cdl">Div ${CY}</div><div class="cdv cy">${fc(d.dcur,'SGD',0)}</div></div>
+    <div class="cat-dcell"><div class="cdl">Accum. Total</div><div class="cdv tot">${fc(d.dtot,'SGD',0)}</div></div>
+  </div>`;}).join('')}
+  <div class="cat-tot-v">
+    <div style="font-size:11px;font-weight:700;color:var(--gray);padding-left:14px;letter-spacing:.4px">PORTFOLIO TOTAL</div>
+    <div class="cat-cell"><div class="cat-v">${fc(tC,'SGD',0)}</div></div>
+    <div class="cat-cell"><div class="cat-v">${fc(tM,'SGD',0)}</div></div>
+    <div class="cat-cell"><div class="cat-v ${tP>=0?'pos':'neg'}">${tP>=0?'+':''}${fc(tP,'SGD',0)}</div></div>
+  </div>
+  <div class="cat-tot-d">
+    <div class="cat-dcell"><div class="cdl">Total B/F</div><div class="cdv bf" style="font-size:13px">${fc(tDbf,'SGD',0)}</div></div>
+    <div class="cat-dcell"><div class="cdl">Total ${CY}</div><div class="cdv cy" style="font-size:13px">${fc(tDcur,'SGD',0)}</div></div>
+    <div class="cat-dcell"><div class="cdl">Grand Total</div><div class="cdv tot" style="font-size:13px">${fc(tDtot,'SGD',0)}</div></div>
+  </div>`:''}
+</div>`;}
+
+// ─── Render ───────────────────────────────────────────────────────────────
+function render(){
+  const q=S.searchQuery.trim().toLowerCase();
+  const invs=S.investments.filter(i=>{
+    if(S.fCcy!=='All'&&i.currency!==S.fCcy)return false;
+    if(S.fAcc!=='All'&&i.account!==S.fAcc)return false;
+    if(q&&!i.name.toLowerCase().includes(q)&&!(i.ticker||'').toLowerCase().includes(q)&&!(i.isin||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+  const all=S.investments.map(i=>calc(i));
+  const tC=all.reduce((s,x)=>s+x.cost,0),tM=all.reduce((s,x)=>s+x.mv,0),tP=tM-tC,
+        tDbf=all.reduce((s,x)=>s+x.dbf,0),tDcur=all.reduce((s,x)=>s+x.dcur,0),tDtot=all.reduce((s,x)=>s+x.dtot,0);
+  document.getElementById('app').innerHTML=`
+<div class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-left"><h1>InvestTracker</h1><div class="hdr-date">${NOW.toLocaleDateString('en-SG',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</div></div>
+    <button class="btn raf" onclick="refreshAll()" ${S.refreshingAll?'disabled':''}>${S.refreshingAll?'<span class="spin"></span> Updating':'🔄 Refresh All'}</button>
+  </div>
+  <div class="tabs">
+    <button class="tab ${S.tab==='portfolio'?'on':''}" onclick="setTab('portfolio')">Portfolio</button>
+    <button class="tab ${S.tab==='dividends'?'on':''}" onclick="setTab('dividends')">Dividends</button>
+    <button class="tab ${S.tab==='summary'?'on':''}" onclick="setTab('summary')">Summary</button>
+  </div>
+</div>
+${S.tab==='portfolio'?renderPort(invs,tC,tM,tP,tDbf,tDcur,tDtot):S.tab==='dividends'?renderDivs(tDbf,tDcur,tDtot):renderSum()}
+${renderModal()}`;
+  // Bind inputs
+  document.querySelectorAll('.spi').forEach(el=>el.addEventListener('change',function(){
+    const inv=S.investments.find(i=>i.id===this.dataset.id);
+    if(inv){inv.spotPrice=parseFloat(this.value)||0;inv.priceAuto=false;inv.priceUpdated=Date.now();save();render();}
+  }));
+  const si=document.getElementById('si');
+  if(si)si.addEventListener('input',function(){S.searchQuery=this.value;renderHoldings();});
+}
+
+// ─── Portfolio Tab ────────────────────────────────────────────────────────
+function renderPort(invs,tC,tM,tP,tDbf,tDcur,tDtot){
+  return`
+<div class="strip">
+  <div class="sc"><div class="sl">Total Cost</div><div class="sv">${fc(tC,'SGD',0)}</div></div>
+  <div class="sc"><div class="sl">Market Value</div><div class="sv">${fc(tM,'SGD',0)}</div></div>
+  <div class="sc"><div class="sl">Unrealised P&L</div><div class="sv ${tP>=0?'pos':'neg'}">${tP>=0?'+':''}${fc(tP,'SGD',0)}</div></div>
+</div>
+${catBreakdown(tC,tM,tP,tDbf,tDcur,tDtot)}
+${yrBanner()}
+<div class="search-wrap">
+  <span class="s-ico">🔍</span>
+  <input id="si" placeholder="Search by name, ticker or ISIN…" value="${S.searchQuery}" autocomplete="off">
+  ${S.searchQuery?`<button class="s-clr" onclick="clearSearch()">✕</button>`:''}
+</div>
+<div class="fbar">
+  ${['All','SGD','USD','GBP','EUR','HKD'].map(c=>`<button class="fc ${S.fCcy===c?'on':''}" onclick="setF('c','${c}')">${c}</button>`).join('')}
+  <div class="fsep"></div>
+  ${['All','Cash','SRS','CPF'].map(a=>`<button class="fc ${S.fAcc===a?'on':''}" onclick="setF('a','${a}')">${a}</button>`).join('')}
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:0 20px;margin-bottom:8px">
+  <div id="hcount" style="font-size:17px;font-weight:700">Holdings (${invs.length})</div>
+  <button class="btn sm" onclick="openM('addInv')">+ Add</button>
+</div>
+<div class="holdings" id="hlist">
+  ${invs.length===0?`<div class="empty"><div class="ei">📈</div><div class="em">${S.searchQuery?'No matches found':'Add your first investment'}</div></div>`:invs.map(inv=>renderCard(inv)).join('')}
+</div>`;}
+
+function renderHoldings(){
+  const q=S.searchQuery.trim().toLowerCase();
+  const invs=S.investments.filter(i=>{
+    if(S.fCcy!=='All'&&i.currency!==S.fCcy)return false;
+    if(S.fAcc!=='All'&&i.account!==S.fAcc)return false;
+    if(q&&!i.name.toLowerCase().includes(q)&&!(i.ticker||'').toLowerCase().includes(q)&&!(i.isin||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+  const hc=document.getElementById('hcount');if(hc)hc.textContent=`Holdings (${invs.length})`;
+  const hl=document.getElementById('hlist');if(!hl)return;
+  hl.innerHTML=invs.length===0?`<div class="empty"><div class="ei">📈</div><div class="em">${q?'No matches found':'Add your first investment'}</div></div>`:invs.map(inv=>renderCard(inv)).join('');
+  document.querySelectorAll('.spi').forEach(el=>el.addEventListener('change',function(){
+    const inv=S.investments.find(i=>i.id===this.dataset.id);
+    if(inv){inv.spotPrice=parseFloat(this.value)||0;inv.priceAuto=false;inv.priceUpdated=Date.now();save();renderHoldings();}
+  }));
+}
+
+// ─── Investment Card ──────────────────────────────────────────────────────
+function renderCard(inv){
+  const s=calc(inv);const loading=S.refreshing[inv.id];
+  const exp=S.expanded.has(inv.id);
+  const chg=inv.priceChange||0,chgP=inv.priceChangePct||0;
+
+  // Price source badge
+  let pb='';
+  if(inv.priceAuto&&inv.spotPrice){
+    if(inv.resolvedBy==='ISIN→OpenFIGI')pb='<span class="pbadge figi">FIGI</span>';
+    else if(inv.resolvedBy?.includes('ISIN'))pb='<span class="pbadge isin">ISIN</span>';
+    else pb='<span class="pbadge live">LIVE</span>';
+  }else pb='<span class="pbadge manual">MANUAL</span>';
+
+  // Card header (always visible)
+  const hdr=`
+  <div class="icard-hdr" onclick="toggleCard('${inv.id}')">
+    <div class="ic-left">
+      <div class="ic-name">${inv.name||'Unnamed'}</div>
+      <div class="ic-tkr">${inv.ticker?`<b>${inv.ticker}</b>`:''} ${inv.ticker&&inv.market?' · ':''}${inv.market||''} ${inv.isin?`<span style="color:var(--blue)">${inv.isin}</span>`:''}</div>
+      <div class="ic-badges">
+        <span class="badge">${inv.type||'Stock'}</span>
+        <span class="badge ${(inv.currency||'').toLowerCase()}">${inv.currency||'–'}</span>
+        <span class="badge ${(inv.account||'').toLowerCase()}">${inv.account||'–'}</span>
+      </div>
+    </div>
+    <div class="ic-right">
+      <div class="ic-pbadge-row">
+        ${pb}
+        <button class="pref-btn" onclick="event.stopPropagation();refreshOne('${inv.id}')" ${loading?'disabled':''}>${loading?'<span class="spin"></span>':'↻'}</button>
+      </div>
+      ${inv.spotPrice
+        ?`<div class="ic-price">${fc(inv.spotPrice,inv.currency,3)}</div>
+          ${inv.priceAuto?`<div class="ic-chg ${chg>=0?'pos':'neg'}">${chg>=0?'+':''}${fc(chg,inv.currency,3)} (${chg>=0?'+':''}${fmt(chgP,2)}%)</div>`:''}
+          <div class="ic-ts">${tsAgo(inv.priceUpdated)}</div>
+          ${inv.resolvedTicker&&inv.resolvedTicker!==(inv.ticker||'').toUpperCase()?`<div class="ic-via">via ${inv.resolvedTicker}</div>`:''}`
+        :`<div style="font-size:11px;color:var(--gray);margin-top:6px">No price yet</div>`}
+      ${!exp&&s.mv>0?`<div class="ic-qpl ${s.pl>=0?'pos':'neg'}">${s.pl>=0?'+':''}${fc(s.pl,inv.currency,0)} (${s.pl>=0?'+':''}${fmt(s.plp,2)}%)</div>`:''}
+      <div class="ic-expand">${exp?'▲ Collapse':'▼ Details'}</div>
+    </div>
+  </div>`;
+
+  if(!exp)return`<div class="icard" id="card-${inv.id}">${hdr}</div>`;
+
+  const divExp=S.divOpen.has(inv.id);
+  const txExp=S.txOpen.has(inv.id);
+  const txs=inv.transactions||[];
+  const showAll=S.showAllTx[inv.id];
+  const displayTxs=showAll?[...txs].reverse():[...txs].reverse().slice(0,4);
+
+  return`<div class="icard" id="card-${inv.id}">
+  ${hdr}
+  <div class="icard-body">
+    ${inv.resolvedBy?.includes('ISIN')?`<div class="isin-info">Price resolved: ISIN <b>${inv.isin}</b> → <b>${inv.resolvedTicker}</b> (${rblabel(inv.resolvedBy)})</div>`:''}
+
+    <!-- Stats: Units & Breakeven, Cost & Value -->
+    <div class="stat-block">
+      <div class="stat-row">
+        <div><div class="stat-lbl">Units Held</div><div class="stat-val">${fmt(s.sh,4)}</div></div>
+        <div><div class="stat-lbl">Breakeven / Unit</div><div class="stat-val">${fc(s.bk,inv.currency,4)}</div></div>
+      </div>
+      <div class="stat-row" style="padding-bottom:0">
+        <div><div class="stat-lbl">Total Cost</div><div class="stat-val">${fc(s.cost,inv.currency)}</div></div>
+        <div><div class="stat-lbl">Market Value</div><div class="stat-val">${fc(s.mv,inv.currency)}</div></div>
+      </div>
+    </div>
+
+    <!-- P&L Banner -->
+    <div class="pl-banner ${s.pl>0.01?'pos':s.pl<-0.01?'neg':'zero'}">
+      <div class="pl-lbl">Unrealised P&L</div>
+      <div class="pl-right">
+        <div class="pl-val ${s.pl>0.01?'pos':s.pl<-0.01?'neg':'zero'}">${s.pl>=0?'+':''}${fc(s.pl,inv.currency)}</div>
+        <div class="pl-pct ${s.pl>0.01?'pos':s.pl<-0.01?'neg':''}">${s.pl>=0?'+':''}${fmt(s.plp,2)}%</div>
+      </div>
+    </div>
+
+    <!-- Manual price entry -->
+    <div class="manual-row">
+      <label>Manual price</label>
+      <input class="spi" data-id="${inv.id}" type="number" step="0.0001" value="${inv.spotPrice||''}" placeholder="Enter price">
+    </div>
+
+    <!-- Dividend Section (collapsible) -->
+    <div class="div-sub-hdr" onclick="toggleDiv('${inv.id}')">
+      <div class="div-sub-title">💰 Dividends</div>
+      <span style="font-size:10px;color:#15803d">${divExp?'▲':'▼'} ${S.dividends.filter(d=>d.invId===inv.id).length} entries</span>
+    </div>
+    ${divExp?`
+    <div class="div3">
+      <div class="d3c"><div class="d3l">Accum. B/F</div><div class="d3v bf">${fc(s.dbf,inv.currency)}</div><div class="d3s">Before ${CY}</div></div>
+      <div class="d3c"><div class="d3l">Year ${CY}</div><div class="d3v cy">${fc(s.dcur,inv.currency)}</div><div class="d3s">This year</div></div>
+      <div class="d3c"><div class="d3l">Accum. Total</div><div class="d3v tot">${fc(s.dtot,inv.currency)}</div><div class="d3s">All time</div></div>
+    </div>
+    <div class="div-yields">
+      <div class="dy-cell"><div class="dy-l">Yield ${CY}</div><div class="dy-v" style="color:var(--green)">${fmt(s.dy,2)}%</div></div>
+      <div class="dy-cell"><div class="dy-l">Total Yield</div><div class="dy-v" style="color:var(--purple)">${fmt(s.dytot,2)}%</div></div>
+    </div>`:''}
+
+    <!-- Transactions (collapsible) -->
+    ${txs.length>0?`
+    <div class="tx-sub-hdr" onclick="toggleTx('${inv.id}')">
+      <div class="tx-sub-title">Transactions (${txs.length})</div>
+      <span style="font-size:10px;color:var(--gray)">${txExp?'▲ Hide':'▼ Show'}</span>
+    </div>
+    ${txExp?`
+    ${displayTxs.map(t=>`
+    <div class="tx-item">
+      <div class="tx-l">
+        <span class="tx-type ${t.type.toLowerCase().replace(' issue','').replace(' ','')}">${t.type}</span>
+        <span class="tx-date">${t.date||''}</span>
+        ${t.notes?`<div class="tx-note">${t.notes}</div>`:''}
+      </div>
+      <div class="tx-r">
+        <div class="tx-units">${fmt(t.shares,4)} units</div>
+        ${t.price?`<div class="tx-price">@ ${fc(t.price,inv.currency,4)}</div>`:''}
+        ${t.fees?`<div class="tx-fee">fee ${fc(t.fees,inv.currency,2)}</div>`:''}
+      </div>
+      <div class="tx-btns">
+        <button class="btn xs out" onclick="openEditTx('${inv.id}','${t.id}')">✏️</button>
+        <button class="btn xs red" onclick="delTx('${inv.id}','${t.id}')">🗑</button>
+      </div>
+    </div>`).join('')}
+    ${txs.length>4?`<button class="show-all-btn" onclick="toggleShowAll('${inv.id}')">${showAll?'Show less ▲':'Show all '+txs.length+' transactions ▼'}</button>`:''}`:''}
+    `:''}
+
+    <!-- Action Buttons -->
+    <div class="card-actions">
+      <button class="btn sm out" onclick="openTx('${inv.id}')">+ Transaction</button>
+      <button class="btn sm out" onclick="openDiv('${inv.id}')">+ Dividend</button>
+      <button class="btn sm out" onclick="openEdit('${inv.id}')">Edit</button>
+      <button class="btn sm red" onclick="delInv('${inv.id}')">Delete</button>
+    </div>
+  </div>
+</div>`;}
+
+// ─── Dividends Tab ────────────────────────────────────────────────────────
+function renderDivs(tDbf,tDcur,tDtot){
+  const divs=S.dividends.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const byInv={};divs.forEach(d=>{if(!byInv[d.invId])byInv[d.invId]=[];byInv[d.invId].push(d);});
+  return`
+<div class="strip">
+  <div class="sc"><div class="sl">Accum. B/F</div><div class="sv bf">${fc(tDbf,'SGD')}</div></div>
+  <div class="sc"><div class="sl">Year ${CY}</div><div class="sv pos">${fc(tDcur,'SGD')}</div></div>
+  <div class="sc"><div class="sl">Accum. Total</div><div class="sv div">${fc(tDtot,'SGD')}</div></div>
+  <div class="sc"><div class="sl">Records</div><div class="sv">${divs.length}</div></div>
+</div>
+${yrBanner()}
+<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 20px 8px">
+  <div style="font-size:17px;font-weight:700">Dividend Ledger</div>
+  <button class="btn sm grn" onclick="openDivG()">+ Add</button>
+</div>
+<div class="div-page">
+  ${divs.length===0?`<div class="empty"><div class="ei">💰</div><div class="em">No dividends recorded yet</div></div>`:''}
+  ${Object.entries(byInv).map(([id,ds])=>{
+    const inv=S.investments.find(i=>i.id===id);
+    const nm=inv?.name||'Unknown',ccy=inv?.currency||'SGD';
+    const bf=ds.filter(d=>d.date&&d.date.slice(0,4)<CY).reduce((s,d)=>s+(+d.amount||0),0);
+    const cur=ds.filter(d=>d.date&&d.date.startsWith(CY)).reduce((s,d)=>s+(+d.amount||0),0);
+    const tot=bf+cur;
+    const byYr={};ds.forEach(d=>{const y=(d.date||'????').slice(0,4);if(!byYr[y])byYr[y]=[];byYr[y].push(d);});
+    const open=S.ledOpen.has(id);
+    return`<div class="led-card">
+      <div class="led-hdr" onclick="toggleLed('${id}')">
+        <div><div class="led-name">${nm}</div><div class="led-tkr">${inv?.ticker||''} · ${ds.length} entries</div></div>
+        <div class="led-right">
+          <div class="led-total">${fc(tot,ccy)}</div>
+          <div class="led-sub">${open?'▲ Collapse':'▼ Details'}</div>
+        </div>
+      </div>
+      ${open?`
+      <div class="led-sum">
+        <div class="ls-cell"><div class="ls-l">Accum. B/F</div><div class="ls-v bf">${fc(bf,ccy)}</div><div class="ls-s">Before ${CY}</div></div>
+        <div class="ls-cell"><div class="ls-l">Year ${CY}</div><div class="ls-v cy">${fc(cur,ccy)}</div><div class="ls-s">This year</div></div>
+        <div class="ls-cell"><div class="ls-l">Accum. Total</div><div class="ls-v tot">${fc(tot,ccy)}</div><div class="ls-s">All time</div></div>
+      </div>
+      ${Object.entries(byYr).sort((a,b)=>b[0].localeCompare(a[0])).map(([yr,yds])=>{
+        const ytot=yds.reduce((s,d)=>s+(+d.amount||0),0);
+        const yrKey=`${id}-${yr}`;const yrOpen=S.ledYrOpen[yrKey]!==false;
+        return`<div>
+          <div class="led-yr-hdr" onclick="toggleLedYr('${yrKey}')">
+            <div class="led-yr-l">${yr} <span style="font-size:11px;font-weight:500;color:var(--gray)">(${yds.length})</span></div>
+            <div class="led-yr-r">${fc(ytot,ccy)}</div>
+          </div>
+          ${yrOpen?yds.map(d=>`
+          <div class="div-entry">
+            <span class="de-date">${d.date||'–'}</span>
+            <span class="de-type">${d.divType||'Cash'}</span>
+            <span class="de-amt">${fc(d.amount,ccy,4)}</span>
+            <div class="de-btns">
+              <button class="btn xs out" onclick="openEditDiv('${d.id}')">✏️</button>
+              <button class="btn xs red" onclick="delDiv('${d.id}')">🗑</button>
+            </div>
+          </div>`).join(''):''}
+        </div>`;}).join('')}`:''}
+    </div>`;}).join('')}
+</div>`;}
+
+// ─── Summary Tab ──────────────────────────────────────────────────────────
+function renderSum(){
+  if(!S.investments.length)return`<div style="padding:0 20px 100px"><div class="empty" style="padding-top:60px"><div class="ei">📊</div><div class="em">Add investments to see summary</div></div></div>`;
+  const aS=S.investments.map(inv=>({inv,s:calc(inv)}));
+  const tMv=aS.reduce((s,x)=>s+x.s.mv,0),tCo=aS.reduce((s,x)=>s+x.s.cost,0),tPl=tMv-tCo,tDiv=aS.reduce((s,x)=>s+x.s.dtot,0);
+  const TK=['ETF','Stock','Unit Trust','Bond','Other'];
+  const bt={};TK.forEach(k=>{bt[k]={mv:0,cost:0,n:0,pl:0,div:0};});
+  aS.forEach(({inv,s})=>{const k=TK.includes(inv.type)?inv.type:'Other';bt[k].mv+=s.mv;bt[k].cost+=s.cost;bt[k].n++;bt[k].pl+=s.pl;bt[k].div+=s.dtot;});
+  const tSlices=TK.filter(k=>bt[k].n>0).map(k=>({l:k,v:bt[k].mv,c:TC[k]}));
+  const AK=['Cash','SRS','CPF'];
+  const ba={};AK.forEach(k=>{ba[k]={mv:0,cost:0,n:0,pl:0,div:0};});
+  aS.forEach(({inv,s})=>{const k=AK.includes(inv.account)?inv.account:'Cash';ba[k].mv+=s.mv;ba[k].cost+=s.cost;ba[k].n++;ba[k].pl+=s.pl;ba[k].div+=s.dtot;});
+  const aSlices=AK.filter(k=>ba[k].n>0).map(k=>({l:k,v:ba[k].mv,c:AC[k]}));
+  const pd={Profit:{mv:0,n:0},Loss:{mv:0,n:0},'Break-even':{mv:0,n:0}};
+  aS.forEach(({s})=>{const k=s.pl>0.01?'Profit':s.pl<-0.01?'Loss':'Break-even';pd[k].mv+=s.mv;pd[k].n++;});
+  const pSlices=Object.entries(pd).filter(([,v])=>v.n>0).map(([k,v])=>({l:k,v:v.mv,c:PC[k]}));
+  const top=[...aS].sort((a,b)=>b.s.mv-a.s.mv).slice(0,6);const mx=top[0]?.s.mv||1;
+
+  function secHdr(key,label){return`<div class="coll" onclick="toggleSum('${key}')"><div class="coll-title">${label}</div><span class="chev ${S.sumSec[key]?'open':''}">▶</span></div>`;}
+
+  return`
+<div class="strip">
+  <div class="sc"><div class="sl">Total Value</div><div class="sv">${fc(tMv,'SGD',0)}</div></div>
+  <div class="sc"><div class="sl">Total Cost</div><div class="sv">${fc(tCo,'SGD',0)}</div></div>
+  <div class="sc"><div class="sl">Total P&L</div><div class="sv ${tPl>=0?'pos':'neg'}">${tPl>=0?'+':''}${fc(tPl,'SGD',0)}</div></div>
+  <div class="sc"><div class="sl">Total Div</div><div class="sv div">${fc(tDiv,'SGD',0)}</div></div>
+</div>
+<div class="sum-page">
+
+  <!-- By Type -->
+  <div class="sum-sec">
+    ${secHdr('type','By Investment Type')}
+    ${S.sumSec.type?`
+    <div class="pie-body">
+      ${pie(tSlices)}
+      <div class="pie-legend">
+        ${tSlices.map(s=>`<div class="pl-row"><div class="p-dot" style="background:${s.c}"></div><span class="p-name">${s.l}</span><span class="p-pct">${fmt(tMv>0?s.v/tMv*100:0,1)}%</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="bk">
+      <div class="bk-hdr" style="grid-template-columns:1.4fr 1fr 1fr 1fr"><span>Type</span><span>Value</span><span>P&L</span><span>Dividends</span></div>
+      ${TK.filter(k=>bt[k].n>0).map(k=>{const d=bt[k];return`<div class="bk-row" style="grid-template-columns:1.4fr 1fr 1fr 1fr">
+        <div class="bk-lbl"><div class="bk-dot" style="background:${TC[k]}"></div>${k}<div class="bk-s">${d.n} holding${d.n>1?'s':''}</div></div>
+        <div class="bk-c">${fc(d.mv,'SGD',0)}</div>
+        <div class="bk-c ${d.pl>=0?'pos':'neg'}">${d.pl>=0?'+':''}${fc(d.pl,'SGD',0)}</div>
+        <div class="bk-c div">${fc(d.div,'SGD',0)}</div>
+      </div>`;}).join('')}
+    </div>`:''}
+  </div>
+
+  <!-- By Account -->
+  <div class="sum-sec">
+    ${secHdr('acc','By Account Type')}
+    ${S.sumSec.acc?`
+    <div class="pie-body">
+      ${pie(aSlices)}
+      <div class="pie-legend">
+        ${aSlices.map(s=>`<div class="pl-row"><div class="p-dot" style="background:${s.c}"></div><span class="p-name">${s.l}</span><span class="p-pct">${fmt(tMv>0?s.v/tMv*100:0,1)}%</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="bk">
+      <div class="bk-hdr" style="grid-template-columns:1.1fr 1fr 1fr 1fr"><span>Account</span><span>Value</span><span>P&L</span><span>Dividends</span></div>
+      ${AK.filter(k=>ba[k].n>0).map(k=>{const d=ba[k];return`<div class="bk-row" style="grid-template-columns:1.1fr 1fr 1fr 1fr">
+        <div class="bk-lbl"><div class="bk-dot" style="background:${AC[k]}"></div>${k}<div class="bk-s">${d.n} holding${d.n>1?'s':''}</div></div>
+        <div class="bk-c">${fc(d.mv,'SGD',0)}</div>
+        <div class="bk-c ${d.pl>=0?'pos':'neg'}">${d.pl>=0?'+':''}${fc(d.pl,'SGD',0)}</div>
+        <div class="bk-c div">${fc(d.div,'SGD',0)}</div>
+      </div>`;}).join('')}
+    </div>`:''}
+  </div>
+
+  <!-- Profitability -->
+  <div class="sum-sec">
+    ${secHdr('prof','Profitability')}
+    ${S.sumSec.prof?`
+    <div class="pie-body">
+      ${pie(pSlices)}
+      <div class="pie-legend">
+        ${pSlices.map(s=>`<div class="pl-row"><div class="p-dot" style="background:${s.c}"></div><span class="p-name">${s.l}</span><span class="p-pct">${fmt(tMv>0?s.v/tMv*100:0,1)}%</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="bk">
+      <div class="bk-hdr" style="grid-template-columns:1.8fr 1fr 1fr"><span>Investment</span><span>P&L</span><span>P&L %</span></div>
+      ${[...aS].sort((a,b)=>b.s.pl-a.s.pl).map(({inv,s})=>`<div class="bk-row ${s.pl>0.01?'pw':s.pl<-0.01?'pl':''}" style="grid-template-columns:1.8fr 1fr 1fr">
+        <div><div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${inv.name}</div><div class="bk-s">${inv.ticker||''} · ${inv.type}</div></div>
+        <div class="bk-c ${s.pl>=0?'pos':'neg'}">${s.pl>=0?'+':''}${fc(s.pl,inv.currency,0)}</div>
+        <div class="bk-c ${s.pl>=0?'pos':'neg'}">${s.pl>=0?'+':''}${fmt(s.plp,2)}%</div>
+      </div>`).join('')}
+    </div>`:''}
+  </div>
+
+  <!-- Top Holdings -->
+  <div class="sum-sec">
+    ${secHdr('top','Top Holdings')}
+    ${S.sumSec.top?top.map(({inv,s})=>{const pct=tMv>0?s.mv/tMv*100:0,bp=mx>0?s.mv/mx*100:0,tc=TC[inv.type]||'#8e8e93';return`<div class="hold-row">
+      <div class="hold-top"><div class="hold-name">${inv.name}</div><div class="hold-val">${fc(s.mv,inv.currency,0)}</div></div>
+      <div class="hold-meta"><div class="hold-ml">${inv.ticker||''} · <span style="color:${tc};font-weight:600">${inv.type}</span> · ${inv.account}</div><div class="hold-mr">${fmt(pct,1)}% of portfolio</div></div>
+      <div class="hold-bar"><div class="hold-fill" style="width:${bp}%;background:${tc}"></div></div>
+    </div>`;}).join(''):''}
+  </div>
+
+</div>`;}
+
+// ─── Modals ───────────────────────────────────────────────────────────────
+function renderModal(){
+  if(!S.modal)return'';
+  const ov=`class="overlay" onclick="bgClose(event)"`;
+
+  if(S.modal==='addInv'||S.modal==='editInv'){
+    const v=S.modal==='editInv'?S.investments.find(i=>i.id===S.editId):{};const isn=S.modal==='addInv';
+    return`<div ${ov}><div class="modal">
+      <div class="modal-title">${isn?'Add Investment':'Edit Investment'}</div>
+      <div class="fg"><label>Search by Name or ISIN</label><input id="fsearch" placeholder="e.g. Vanguard, DBS, AAPL, LU0943347566…" oninput="onNameInput(this.value)" autocomplete="off"><div id="ac-drop" class="ac-drop" style="display:none"></div><div class="hint">Tap a result to auto-fill ticker, currency & market</div></div>
+      <div class="fg"><label>Investment Name *</label><input id="fn" value="${v?.name||''}" placeholder="e.g. Vanguard FTSE All-World"></div>
+      <div class="row2">
+        <div class="fg"><label>Ticker / Bloomberg</label><input id="ftk" value="${v?.ticker||''}" placeholder="VWRA.L or 580703"><div class="hint">Numeric auto-gets .SI</div></div>
+        <div class="fg"><label>ISIN</label><input id="fis" value="${v?.isin||''}" placeholder="LU0943347566"><div class="hint">Fallback for Unit Trusts</div></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Type</label><select id="fty">${['ETF','Stock','Unit Trust','Bond'].map(x=>`<option ${v?.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
+        <div class="fg"><label>Market</label><select id="fm">${['SGX','NYSE','NASDAQ','LSE','HKEX','Other'].map(x=>`<option ${v?.market===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Currency</label><select id="fc2">${['SGD','USD','GBP','EUR','HKD'].map(x=>`<option ${v?.currency===x?'selected':''}>${x}</option>`).join('')}</select></div>
+        <div class="fg"><label>Account</label><select id="fa">${['Cash','SRS','CPF'].map(x=>`<option ${v?.account===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      </div>
+      <div class="fg"><label>Notes</label><input id="fno" value="${v?.notes||''}" placeholder="Optional"></div>
+      <div class="m-actions"><button class="btn out" onclick="closeM()">Cancel</button><button class="btn" onclick="saveInv()">${isn?'Add & Fetch Price':'Save & Refresh'}</button></div>
+    </div></div>`;}
+
+  if(S.modal==='addTx'){
+    const inv=S.investments.find(i=>i.id===S.txId);
+    return`<div ${ov}><div class="modal">
+      <div class="modal-title">Add Transaction</div>
+      <div class="modal-sub">${inv?.name||''}</div>
+      <div class="fg"><label>Type</label><select id="ftt">${['Buy','Sell','Rights Issue','Free Issue'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+      <div class="row2"><div class="fg"><label>Date *</label><input id="ftd" type="date" value="${new Date().toISOString().slice(0,10)}"></div><div class="fg"><label>Units *</label><input id="fts" type="number" step="0.0001" placeholder="0.0000"></div></div>
+      <div class="row2"><div class="fg"><label>Price / Unit</label><input id="ftp" type="number" step="0.0001" placeholder="0.0000"></div><div class="fg"><label>Fees</label><input id="ftf" type="number" step="0.01" placeholder="0.00"></div></div>
+      <div class="fg"><label>Notes</label><input id="ftn" placeholder="Optional"></div>
+      <div class="m-actions"><button class="btn out" onclick="closeM()">Cancel</button><button class="btn" onclick="saveTx()">Add</button></div>
+    </div></div>`;}
+
+  if(S.modal==='editTx'){
+    const inv=S.investments.find(i=>i.id===S.txEditInvId);const tx=(inv?.transactions||[]).find(t=>t.id===S.txEditId);if(!tx)return'';
+    return`<div ${ov}><div class="modal">
+      <div class="modal-title">Edit Transaction</div>
+      <div class="modal-sub">${inv?.name||''}</div>
+      <div class="fg"><label>Type</label><select id="ftt">${['Buy','Sell','Rights Issue','Free Issue'].map(x=>`<option ${tx.type===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="row2"><div class="fg"><label>Date *</label><input id="ftd" type="date" value="${tx.date||''}"></div><div class="fg"><label>Units *</label><input id="fts" type="number" step="0.0001" value="${tx.shares||''}"></div></div>
+      <div class="row2"><div class="fg"><label>Price / Unit</label><input id="ftp" type="number" step="0.0001" value="${tx.price||''}"></div><div class="fg"><label>Fees</label><input id="ftf" type="number" step="0.01" value="${tx.fees||''}"></div></div>
+      <div class="fg"><label>Notes</label><input id="ftn" value="${tx.notes||''}" placeholder="Optional"></div>
+      <div class="m-actions"><button class="btn out" onclick="closeM()">Cancel</button><button class="btn amber" onclick="updateTx()">Save Changes</button></div>
+    </div></div>`;}
+
+  if(S.modal==='addDiv'){
+    return`<div ${ov}><div class="modal">
+      <div class="modal-title">Add Dividend</div>
+      <div class="fg"><label>Investment *</label><select id="fdi">${S.investments.map(i=>`<option value="${i.id}" ${i.id===S.txId?'selected':''}>${i.name}</option>`).join('')}</select></div>
+      <div class="row2"><div class="fg"><label>Date *</label><input id="fdd" type="date" value="${new Date().toISOString().slice(0,10)}"></div><div class="fg"><label>Amount *</label><input id="fda" type="number" step="0.0001" placeholder="0.0000"></div></div>
+      <div class="fg"><label>Type</label><select id="fdt">${['Cash','Scrip','Special','Return of Capital'].map(x=>`<option>${x}</option>`).join('')}</select></div>
+      <div class="fg"><label>Notes</label><input id="fdn" placeholder="e.g. Q1 2026 dividend"></div>
+      <div class="m-actions"><button class="btn out" onclick="closeM()">Cancel</button><button class="btn grn" onclick="saveDiv()">Add</button></div>
+    </div></div>`;}
+
+  if(S.modal==='editDiv'){
+    const dv=S.dividends.find(d=>d.id===S.divEditId);if(!dv)return'';const inv=S.investments.find(i=>i.id===dv.invId);
+    return`<div ${ov}><div class="modal">
+      <div class="modal-title">Edit Dividend</div>
+      <div class="modal-sub">${inv?.name||''}</div>
+      <div class="fg"><label>Investment</label><select id="fdi">${S.investments.map(i=>`<option value="${i.id}" ${i.id===dv.invId?'selected':''}>${i.name}</option>`).join('')}</select></div>
+      <div class="row2"><div class="fg"><label>Date *</label><input id="fdd" type="date" value="${dv.date||''}"></div><div class="fg"><label>Amount *</label><input id="fda" type="number" step="0.0001" value="${dv.amount||''}"></div></div>
+      <div class="fg"><label>Type</label><select id="fdt">${['Cash','Scrip','Special','Return of Capital'].map(x=>`<option ${dv.divType===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="fg"><label>Notes</label><input id="fdn" value="${dv.notes||''}" placeholder="Optional"></div>
+      <div class="m-actions"><button class="btn out" onclick="closeM()">Cancel</button><button class="btn amber" onclick="updateDiv()">Save Changes</button></div>
+    </div></div>`;}
+
+  return'';}
+
+// ─── Actions ──────────────────────────────────────────────────────────────
+function setTab(t){S.tab=t;render();}
+function setF(k,v){if(k==='c')S.fCcy=v;else S.fAcc=v;render();}
+function clearSearch(){S.searchQuery='';render();}
+function toggleCat(){S.catOpen=!S.catOpen;render();}
+function toggleSum(k){S.sumSec[k]=!S.sumSec[k];render();}
+function toggleCard(id){if(S.expanded.has(id))S.expanded.delete(id);else S.expanded.add(id);renderHoldings();}
+function toggleDiv(id){if(S.divOpen.has(id))S.divOpen.delete(id);else S.divOpen.add(id);renderHoldings();}
+function toggleTx(id){if(S.txOpen.has(id))S.txOpen.delete(id);else S.txOpen.add(id);renderHoldings();}
+function toggleShowAll(id){S.showAllTx[id]=!S.showAllTx[id];renderHoldings();}
+function toggleLed(id){if(S.ledOpen.has(id))S.ledOpen.delete(id);else S.ledOpen.add(id);render();}
+function toggleLedYr(key){S.ledYrOpen[key]=S.ledYrOpen[key]===false?true:false;render();}
+function openM(m){S.modal=m;S.editId=null;S.acResults=[];render();}
+function openEdit(id){S.modal='editInv';S.editId=id;S.acResults=[];render();}
+function openTx(id){S.modal='addTx';S.txId=id;render();}
+function openDiv(id){S.modal='addDiv';S.txId=id;render();}
+function openDivG(){S.modal='addDiv';S.txId=S.investments[0]?.id||null;render();}
+function openEditTx(invId,txId){S.modal='editTx';S.txEditInvId=invId;S.txEditId=txId;render();}
+function openEditDiv(divId){S.modal='editDiv';S.divEditId=divId;render();}
+function closeM(){S.modal=null;S.editId=null;S.txId=null;S.txEditInvId=null;S.txEditId=null;S.divEditId=null;S.acResults=[];S.acLoading=false;render();}
+function bgClose(e){if(e.target.classList.contains('overlay'))closeM();}
+
+function saveInv(){
+  const name=document.getElementById('fn').value.trim();if(!name){alert('Investment name is required.');return;}
+  const ticker=document.getElementById('ftk').value.trim(),isin=document.getElementById('fis').value.trim();
+  if(S.modal==='addInv'){
+    const nv={id:uid(),name,ticker,isin,type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim(),spotPrice:0,transactions:[],resolvedTicker:null,resolvedBy:null};
+    S.investments.push(nv);save();closeM();if(ticker||isin)setTimeout(()=>refreshOne(nv.id),300);
+  }else{
+    const inv=S.investments.find(i=>i.id===S.editId);
+    if(inv){if(inv.ticker!==ticker||inv.isin!==isin){inv.resolvedTicker=null;inv.resolvedBy=null;}Object.assign(inv,{name,ticker,isin,type:document.getElementById('fty').value,market:document.getElementById('fm').value,currency:document.getElementById('fc2').value,account:document.getElementById('fa').value,notes:document.getElementById('fno').value.trim()});}
+    save();closeM();if(inv&&(ticker||isin))setTimeout(()=>refreshOne(inv.id),300);
+  }
+}
+function saveTx(){
+  const sh=parseFloat(document.getElementById('fts').value);if(!sh||sh<=0){alert('Enter valid units.');return;}
+  const inv=S.investments.find(i=>i.id===S.txId);if(!inv)return;if(!inv.transactions)inv.transactions=[];
+  inv.transactions.push({id:uid(),type:document.getElementById('ftt').value,date:document.getElementById('ftd').value,shares:sh,price:parseFloat(document.getElementById('ftp').value)||0,fees:parseFloat(document.getElementById('ftf').value)||0,notes:document.getElementById('ftn').value.trim()});
+  inv.transactions.sort((a,b)=>(a.date||'').localeCompare(b.date||''));save();closeM();
+}
+function updateTx(){
+  const sh=parseFloat(document.getElementById('fts').value);if(!sh||sh<=0){alert('Enter valid units.');return;}
+  const inv=S.investments.find(i=>i.id===S.txEditInvId);if(!inv)return;
+  const tx=(inv.transactions||[]).find(t=>t.id===S.txEditId);if(!tx)return;
+  Object.assign(tx,{type:document.getElementById('ftt').value,date:document.getElementById('ftd').value,shares:sh,price:parseFloat(document.getElementById('ftp').value)||0,fees:parseFloat(document.getElementById('ftf').value)||0,notes:document.getElementById('ftn').value.trim()});
+  inv.transactions.sort((a,b)=>(a.date||'').localeCompare(b.date||''));save();toast('Transaction updated');closeM();
+}
+function delTx(invId,txId){if(!confirm('Delete this transaction?'))return;const inv=S.investments.find(i=>i.id===invId);if(!inv)return;inv.transactions=(inv.transactions||[]).filter(t=>t.id!==txId);save();renderHoldings();toast('Transaction deleted');}
+function saveDiv(){
+  const amt=parseFloat(document.getElementById('fda').value);if(!amt||amt<=0){alert('Enter valid amount.');return;}
+  S.dividends.push({id:uid(),invId:document.getElementById('fdi').value,date:document.getElementById('fdd').value,amount:amt,divType:document.getElementById('fdt').value,notes:document.getElementById('fdn').value.trim()});
+  save();closeM();
+}
+function updateDiv(){
+  const amt=parseFloat(document.getElementById('fda').value);if(!amt||amt<=0){alert('Enter valid amount.');return;}
+  const dv=S.dividends.find(d=>d.id===S.divEditId);if(!dv)return;
+  Object.assign(dv,{invId:document.getElementById('fdi').value,date:document.getElementById('fdd').value,amount:amt,divType:document.getElementById('fdt').value,notes:document.getElementById('fdn').value.trim()});
+  save();toast('Dividend updated');closeM();
+}
+function delDiv(divId){if(!confirm('Delete this dividend?'))return;S.dividends=S.dividends.filter(d=>d.id!==divId);save();render();toast('Dividend deleted');}
+function delInv(id){if(!confirm('Delete this investment and all its data?'))return;S.investments=S.investments.filter(i=>i.id!==id);S.dividends=S.dividends.filter(d=>d.invId!==id);S.expanded.delete(id);S.divOpen.delete(id);S.txOpen.delete(id);save();render();}
+
+render();
+if(S.investments.some(i=>i.ticker||i.isin))setTimeout(refreshAll,1500);
+</script>
+</body>
+</html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="InvestTracker">
+<title>InvestTracker</title>
+<style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;background:#f2f2f7;color:#1c1c1e;max-width:430px;margin:0 auto;min-height:100vh}
 :root{--blue:#007aff;--green:#34c759;--red:#ff3b30;--gray:#8e8e93;--card:#fff;--border:#e5e5ea;--purple:#af52de;--orange:#ff9500;--teal:#5ac8fa;--indigo:#5856d6}
